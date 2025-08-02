@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PinkDays</title>
     
-    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Apple-specific meta tags for Add to Homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
 
-    <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
@@ -121,16 +118,13 @@
             <h1 class="text-4xl font-bold main-gradient-text">PinkDays</h1>
         </header>
 
-        <!-- Tab Navigation -->
         <nav class="flex justify-center bg-gray-200 rounded-lg p-1 mb-6">
             <button data-tab="stats" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors active">Stats</button>
             <button data-tab="calendar" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Calendar</button>
             <button data-tab="settings" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Settings</button>
         </nav>
 
-        <!-- Tab Content -->
         <div id="tab-content">
-            <!-- Stats Tab -->
             <div id="stats-tab" class="tab-pane space-y-6">
                 <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
@@ -156,18 +150,15 @@
                 <section class="bg-white p-6 rounded-2xl shadow-lg">
                     <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
                     <div id="flow-analysis" class="text-center text-gray-600">
-                        <!-- Flow analysis will be injected here -->
-                    </div>
+                        </div>
                 </section>
                 <section class="bg-white p-6 rounded-2xl shadow-lg">
                     <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
                     <ul id="period-history-list" class="space-y-3">
-                        <!-- History items will be injected here -->
-                    </ul>
+                        </ul>
                 </section>
             </div>
 
-            <!-- Calendar Tab -->
             <div id="calendar-tab" class="tab-pane hidden">
                 <main class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-4">
@@ -210,7 +201,6 @@
                 </main>
             </div>
 
-            <!-- Settings Tab -->
             <div id="settings-tab" class="tab-pane hidden">
                 <section class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
                     <h3 class="text-xl font-semibold text-center mb-4">Data Management</h3>
@@ -224,19 +214,25 @@
                     </div>
                     <div class="pt-4 border-t">
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <button id="upload-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-lg shadow-md border-2 border-pink-500 hover:bg-pink-50 transition-colors">
-                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                </svg>
-                                Upload
-                            </button>
-                            <input type="file" id="upload-data-input" class="hidden" accept=".json">
-                            <button id="download-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
-                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                                Download
-                            </button>
+                            <div class="flex-1 text-center">
+                                <button id="import-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-lg shadow-md border-2 border-pink-500 hover:bg-pink-50 transition-colors">
+                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                    Import
+                                </button>
+                                <input type="file" id="upload-data-input" class="hidden" accept=".json">
+                                <p class="text-xs text-gray-500 mt-1">Import a backup file to this device.</p>
+                            </div>
+                            <div class="flex-1 text-center">
+                                <button id="export-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
+                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Export
+                                </button>
+                                <p class="text-xs text-gray-500 mt-1">Export your data to a backup file.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="pt-4 border-t">
@@ -248,7 +244,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div id="welcome-modal" class="modal-backdrop hidden">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
             <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'">
@@ -269,7 +264,7 @@
                 </li>
                 <li class="flex items-center">
                     <span class="text-2xl mr-4">⚙️</span>
-                    <span><b>Download</b> or <b>Upload</b> your data in Settings.</span>
+                    <span><b>Export</b> or <b>Import</b> your data in Settings.</span>
                 </li>
             </ul>
             <button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">
@@ -293,8 +288,7 @@
             </div>
             <h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3>
             <div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
-                <!-- Daily flow selectors will be injected here -->
-            </div>
+                </div>
             <div class="flex flex-col gap-2">
                 <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button>
                 <button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button>
@@ -307,8 +301,7 @@
             <h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2>
             <p id="confirm-message" class="text-gray-600 mb-6"></p>
             <div id="confirm-options-container" class="flex gap-4">
-                <!-- Buttons will be injected here -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -341,8 +334,9 @@
                 cycleOverrideInput: document.getElementById('cycle-length-input-settings'),
                 saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'),
                 recalculateBtn: document.getElementById('recalculate-btn-settings'),
-                downloadBtn: document.getElementById('download-data-btn'),
-                uploadBtn: document.getElementById('upload-data-btn'),
+                // ---- FIXED HERE ----
+                exportBtn: document.getElementById('export-data-btn'), // Changed from downloadBtn and incorrect ID
+                importBtn: document.getElementById('import-data-btn'), // Changed from uploadBtn and incorrect ID
                 uploadInput: document.getElementById('upload-data-input'),
                 resetBtn: document.getElementById('reset-data-btn'),
 
@@ -855,7 +849,8 @@
                  showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
             });
 
-            app.downloadBtn.addEventListener('click', function() {
+            // ---- FIXED HERE ----
+            app.exportBtn.addEventListener('click', function() {
                 var dataStr = JSON.stringify(periodData, null, 2);
                 var blob = new Blob([dataStr], {type: "application/json"});
                 var url = URL.createObjectURL(blob);
@@ -866,7 +861,7 @@
                 URL.revokeObjectURL(url);
             });
 
-            app.uploadBtn.addEventListener('click', function() {
+            app.importBtn.addEventListener('click', function() {
                 app.uploadInput.click();
             });
 
