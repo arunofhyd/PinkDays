@@ -1,6 +1,6 @@
-🌸 PinkDays
+
 <p align="center">
-<img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/>
+<img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/> **PinkDays**
 </p>
 
 <p align="center">
@@ -8,6 +8,7 @@ A simple, private, and beautiful period tracker that runs entirely in your brows
 </p>
 
 ✨ **Features**
+
 📈 **Smart Predictions**: Automatically predicts your next period and fertile window based on your cycle history.
 
 🗓️ **Interactive Calendar**: A clean, visual calendar to log your period, flow intensity, and see past and future cycles.
