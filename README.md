@@ -1,20 +1,27 @@
-
 <p align="center">
-<img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/>
+  <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/>
 </p>
 
-<p align="center">
-A simple, private, and beautiful period tracker that runs locally on your device.
-</p>
+<h2 align="center">🌸 PinkDays</h2>
+<p align="center">A beautiful, private, and lightweight period tracker that runs entirely on your device.</p>
 
-✨ **Features**
+---
 
-📈 **Smart Predictions**: Automatically predicts your next period and fertile window based on your cycle history.
+### ✨ Features
 
-🗓️ **Interactive Calendar**: A clean, visual calendar to log your period, flow intensity, and see past and future cycles.
+- 📈 **Smart Predictions**  
+  Accurately forecasts your next period and fertile window using your cycle history.
 
-📊 **Detailed Stats**: Get insights into your average cycle length, period duration, and flow patterns.
+- 🗓️ **Interactive Calendar**  
+  Log your period, flow intensity, and view past and upcoming cycles in a clean visual layout.
 
-🔒 **Completely Private**: All your data is stored securely on your own device in your browser's local storage. Nothing is ever uploaded to a server.
+- 📊 **Insightful Statistics**  
+  Track your average cycle length, period duration, and flow patterns with easy-to-understand graphs.
 
-📥 **Data Management**: Easily download a backup of your data or upload it to a new device in the settings.
+- 🔒 **Privacy-First Design**  
+  Your data stays 100% on your device, stored securely in your browser. Nothing is ever uploaded or shared.
+
+- 📥 **Data Control**  
+  Backup and restore your data with one click—perfect for switching devices or peace of mind.
+
+---
