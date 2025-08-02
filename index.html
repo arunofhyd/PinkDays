@@ -212,19 +212,19 @@
             <ul class="text-left space-y-3 mb-8">
                 <li class="flex items-center">
                     <span class="text-2xl mr-4">🗓️</span>
-                    <span>Track your period & flow on the <b>Calendar</b>.</span>
+                    <span>Track your period & flow on the <span class="font-semibold">Calendar</span>.</span>
                 </li>
                 <li class="flex items-center">
                     <span class="text-2xl mr-4">📈</span>
-                    <span>View predictions & history in the <b>Stats</b> tab.</span>
+                    <span>View predictions & history in the <span class="font-semibold">Stats</span> tab.</span>
                 </li>
                 <li class="flex items-center">
                     <span class="text-2xl mr-4">🔮</span>
-                    <span>See your estimated <b>fertile window</b> automatically.</span>
+                    <span>See your estimated <span class="font-semibold">fertile window</span> automatically.</span>
                 </li>
                 <li class="flex items-center">
                     <span class="text-2xl mr-4">⚙️</span>
-                    <span><b>Download</b> or <b>Upload</b> your data in Settings.</span>
+                    <span><span class="font-semibold">Download</span> or <span class="font-semibold">Upload</span> your data in Settings.</span>
                 </li>
             </ul>
             <button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">
@@ -534,7 +534,7 @@
                         }
                     }
                     const cycleLength = i > 0 ? (fromISODateString(start) - fromISODateString(startDates[i-1])) / (1000 * 60 * 60 * 24) : null;
-                    return { start, end, length, cycleLength };
+                    return { start, end: endDate, length, cycleLength };
                 });
             };
             
