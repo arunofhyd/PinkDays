@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-A simple, private, and beautiful period tracker that runs entirely in your browser.
+A simple, private, and beautiful period tracker that runs locally on your device.
 </p>
 
 ✨ **Features**
