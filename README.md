@@ -1,6 +1,6 @@
 
 <p align="center">
-<img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/> **PinkDays**
+<img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/> PinkDays
 </p>
 
 <p align="center">
