@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PinkDays</title>
     
+    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 
+    <!-- Apple-specific meta tags for Add to Homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
 
+    <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
@@ -125,6 +128,7 @@
         </nav>
 
         <div id="tab-content">
+            <!-- Stats Tab -->
             <div id="stats-tab" class="tab-pane space-y-6">
                 <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
@@ -159,6 +163,7 @@
                 </section>
             </div>
 
+            <!-- Calendar Tab -->
             <div id="calendar-tab" class="tab-pane hidden">
                 <main class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-4">
@@ -201,6 +206,7 @@
                 </main>
             </div>
 
+            <!-- Settings Tab -->
             <div id="settings-tab" class="tab-pane hidden">
                 <section class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
                     <h3 class="text-xl font-semibold text-center mb-4">Data Management</h3>
@@ -238,7 +244,16 @@
                     <div class="pt-4 border-t">
                         <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
                     </div>
-                    <p class="text-center text-gray-400 text-xs pt-4">Made with ❤️ by Arun Thomas</p>
+                    <footer class="text-center pt-4 space-y-2">
+                        <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-pink-500 hover:text-pink-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            Reach out to the developer
+                        </a>
+                        <p class="text-gray-400 text-xs">Made with ❤️ for all women</p>
+                    </footer>
                 </section>
             </div>
         </div>
@@ -334,9 +349,8 @@
                 cycleOverrideInput: document.getElementById('cycle-length-input-settings'),
                 saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'),
                 recalculateBtn: document.getElementById('recalculate-btn-settings'),
-                // ---- FIXED HERE ----
-                exportBtn: document.getElementById('export-data-btn'), // Changed from downloadBtn and incorrect ID
-                importBtn: document.getElementById('import-data-btn'), // Changed from uploadBtn and incorrect ID
+                exportBtn: document.getElementById('export-data-btn'),
+                importBtn: document.getElementById('import-data-btn'),
                 uploadInput: document.getElementById('upload-data-input'),
                 resetBtn: document.getElementById('reset-data-btn'),
 
@@ -849,7 +863,6 @@
                  showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
             });
 
-            // ---- FIXED HERE ----
             app.exportBtn.addEventListener('click', function() {
                 var dataStr = JSON.stringify(periodData, null, 2);
                 var blob = new Blob([dataStr], {type: "application/json"});
