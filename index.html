@@ -70,7 +70,7 @@
         }
         .day.today {
             font-weight: bold;
-            color: #ff5c7c;
+            color: #1f2937; /* Black bold text */
             box-shadow: 0 0 0 2px #ff8ca6;
         }
         .day:not(.disabled):hover {
@@ -223,7 +223,7 @@
                     <div class="pt-4 border-t">
                         <h4 class="font-semibold text-gray-800 mb-2">Data Management</h4>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <button id="upload-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
+                            <button id="upload-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-lg shadow-md border-2 border-pink-500 hover:bg-pink-50 transition-colors">
                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                 </svg>
@@ -241,7 +241,7 @@
                     <div class="pt-4 border-t">
                         <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
                     </div>
-                    <p class="text-center text-gray-400 text-xs pt-4">Made with ❤️ for Sheetu baby by Arun Thomas</p>
+                    <p class="text-center text-gray-400 text-xs pt-4">Made with ❤️ by Arun Thomas</p>
                 </section>
             </div>
         </div>
@@ -295,7 +295,7 @@
                 <!-- Daily flow selectors will be injected here -->
             </div>
             <div class="flex flex-col gap-2">
-                <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save Period</button>
+                <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button>
                 <button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button>
             </div>
         </div>
@@ -720,10 +720,11 @@
                     dayEl.className = 'flex justify-between items-center bg-white p-2 rounded';
                     dayEl.innerHTML = 
                         '<span class="text-sm font-medium">' + current.toLocaleDateString('default', {weekday: 'short', month: 'short', day: 'numeric'}) + '</span>' +
-                        '<div class="flex gap-1" data-date="' + dayStr + '">' +
+                        '<div class="flex gap-1 items-center" data-date="' + dayStr + '">' +
                             '<button data-flow="light" class="px-3 py-1 text-xs rounded ' + (flow === 'light' ? 'flow-light' : 'bg-gray-200') + '">Light</button>' +
                             '<button data-flow="medium" class="px-3 py-1 text-xs rounded ' + (flow === 'medium' ? 'flow-medium' : 'bg-gray-200') + '">Medium</button>' +
                             '<button data-flow="heavy" class="px-3 py-1 text-xs rounded ' + (flow === 'heavy' ? 'flow-heavy' : 'bg-gray-200') + '">Heavy</button>' +
+                            '<button data-action="delete" class="ml-2 text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path></svg></button>' +
                         '</div>';
                     app.dailyFlowContainer.appendChild(dayEl);
                     current.setDate(current.getDate() + 1);
@@ -784,14 +785,22 @@
             app.endDateInput.addEventListener('change', updateDailyFlowSelectors);
 
             app.dailyFlowContainer.addEventListener('click', function(e) {
-                if (e.target.tagName === 'BUTTON') {
-                    var buttons = e.target.parentElement.querySelectorAll('button');
-                    buttons.forEach(function(b) {
-                        b.classList.remove('flow-light', 'flow-medium', 'flow-heavy');
-                        b.classList.add('bg-gray-200');
-                    });
-                    e.target.classList.remove('bg-gray-200');
-                    e.target.classList.add('flow-' + e.target.dataset.flow);
+                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    var button = e.target.closest('button');
+                    if (button.dataset.action === 'delete') {
+                        var row = button.closest('.flex[data-date]');
+                        var dateToDelete = row.dataset.date;
+                        periodData.periods = periodData.periods.filter(p => p.date !== dateToDelete);
+                        row.parentElement.remove(); // Remove the row from the UI
+                    } else if (button.dataset.flow) {
+                        var buttons = button.parentElement.querySelectorAll('button[data-flow]');
+                        buttons.forEach(function(b) {
+                            b.classList.remove('flow-light', 'flow-medium', 'flow-heavy');
+                            b.classList.add('bg-gray-200');
+                        });
+                        button.classList.remove('bg-gray-200');
+                        button.classList.add('flow-' + button.dataset.flow);
+                    }
                 }
             });
             
@@ -871,33 +880,17 @@
                             throw new Error("Invalid file format");
                         }
                         
-                        showConfirm("Upload Data", "How do you want to handle the uploaded data? Merging will keep your existing data and add/overwrite with new data.", [
-                            { 
-                                text: "Merge", 
-                                action: function() {
-                                    var newPeriods = {};
-                                    periodData.periods.forEach(function(p) {
-                                        newPeriods[p.date] = p;
-                                    });
-                                    uploadedData.periods.forEach(function(p) {
-                                        newPeriods[p.date] = p;
-                                    });
-                                    periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function(key) { return newPeriods[key]; });
-                                    periodData.cycleLength = uploadedData.cycleLength;
-                                    saveData();
-                                    showConfirm("Success", "Data has been merged.", [{text: "OK"}]);
-                                }
-                            },
-                            { 
-                                text: "Overwrite", 
-                                action: function() {
-                                    periodData = uploadedData;
-                                    saveData();
-                                    showConfirm("Success", "Data has been overwritten.", [{text: "OK"}]);
-                                }
-                            },
-                            { text: "Cancel", style: 'cancel' }
-                        ]);
+                        var newPeriods = {};
+                        periodData.periods.forEach(function(p) {
+                            newPeriods[p.date] = p;
+                        });
+                        uploadedData.periods.forEach(function(p) {
+                            newPeriods[p.date] = p;
+                        });
+                        periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function(key) { return newPeriods[key]; });
+                        periodData.cycleLength = uploadedData.cycleLength;
+                        saveData();
+                        showConfirm("Success", "Data has been merged.", [{text: "OK"}]);
 
                     } catch (err) {
                         showConfirm("Upload Error", "The selected file is not a valid PinkDays backup.", [{text: "OK"}]);
