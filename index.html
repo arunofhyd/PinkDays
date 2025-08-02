@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb; /* gray-50 */
+            background-color: #f9fafb;
         }
         .main-gradient-text {
             color: #ff5c7c;
@@ -40,11 +40,18 @@
             justify-content: center;
             border-radius: 50%;
         }
-        /* Flow intensity styles */
-        .flow-light { background-color: #ffb8c9; color: #9d174d; }
-        .flow-medium { background-color: #ff8ca6; color: #fff; }
-        .flow-heavy { background-color: #ff5c7c; color: #fff; }
-        
+        .flow-light { 
+            background-color: #ffb8c9; 
+            color: #9d174d; 
+        }
+        .flow-medium { 
+            background-color: #ff8ca6; 
+            color: #fff; 
+        }
+        .flow-heavy { 
+            background-color: #ff5c7c; 
+            color: #fff; 
+        }
         .predicted-day {
             background-color: #fff0f3;
             border: 1px dashed #ffb8c9; 
@@ -65,9 +72,8 @@
             color: #9ca3af;
         }
         .sunday-text {
-            color: #ef4444; /* red-500 */
+            color: #ef4444;
         }
-        /* Modal styles */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -91,6 +97,9 @@
         .tab-btn.active {
             background-color: #ff5c7c;
             color: white;
+        }
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -118,7 +127,7 @@
                     <p id="next-period-countdown" class="text-5xl font-bold">--</p>
                     <p id="next-period-date" class="text-sm opacity-80 h-5"></p>
                 </section>
-                 <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 text-gray-700">Next Fertile Window</h3>
                     <p id="next-fertile-window" class="text-xl font-bold main-gradient-text">--</p>
                 </section>
@@ -134,7 +143,7 @@
                         </div>
                     </div>
                 </section>
-                 <section class="bg-white p-6 rounded-2xl shadow-lg">
+                <section class="bg-white p-6 rounded-2xl shadow-lg">
                     <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
                     <div id="flow-analysis" class="text-center text-gray-600">
                         <!-- Flow analysis will be injected here -->
@@ -153,21 +162,37 @@
                 <main class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-4">
                         <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
                         </button>
                         <h2 id="month-year" class="text-xl font-semibold"></h2>
                         <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
                         </button>
                     </div>
                     <div class="grid grid-cols-7 text-center font-medium text-gray-500 mb-2">
-                        <div class="sunday-text">Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        <div class="sunday-text">Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
                     </div>
                     <div id="calendar-grid" class="calendar-grid"></div>
                     <div class="mt-4 pt-4 border-t flex justify-center items-center gap-4 text-xs text-gray-600">
-                        <div class="flex items-center"><span class="legend-dot bg-[#ff8ca6]"></span>Period</div>
-                        <div class="flex items-center"><span class="legend-dot bg-cyan-200"></span>Fertile</div>
-                        <div class="flex items-center"><span class="legend-dot predicted-day border-[#ffb8c9]"></span>Predicted</div>
+                        <div class="flex items-center">
+                            <span class="legend-dot bg-pink-300"></span>Period
+                        </div>
+                        <div class="flex items-center">
+                            <span class="legend-dot bg-cyan-200"></span>Fertile
+                        </div>
+                        <div class="flex items-center">
+                            <span class="legend-dot predicted-day border border-pink-200"></span>Predicted
+                        </div>
                     </div>
                     <div class="text-center mt-4 pt-4 border-t">
                         <button id="log-period-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Log New Period</button>
@@ -177,7 +202,7 @@
 
             <!-- Settings Tab -->
             <div id="settings-tab" class="tab-pane hidden">
-                 <section class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
+                <section class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
                     <h3 class="text-xl font-semibold text-center mb-4">Settings</h3>
                     <div>
                         <label for="cycle-length-input-settings" class="block text-sm font-medium text-gray-700">Override Cycle Length (days)</label>
@@ -185,20 +210,30 @@
                             <input type="number" id="cycle-length-input-settings" class="w-full p-2 border border-gray-300 rounded-lg">
                             <button id="save-cycle-override-btn" class="px-4 py-2 main-gradient-box text-white font-semibold rounded-lg hover:opacity-90">Save</button>
                         </div>
-                         <button id="recalculate-btn-settings" class="text-sm text-[#ff5c7c] hover:underline mt-2">Auto-calculate from history</button>
+                        <button id="recalculate-btn-settings" class="text-sm text-pink-600 hover:underline mt-2">Auto-calculate from history</button>
                     </div>
                     <div class="pt-4 border-t">
                         <h4 class="font-semibold text-gray-800 mb-2">Data Management</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                             <button id="download-data-btn" class="w-full bg-[#ff8ca6] text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-[#ff5c7c] transition-colors">Download Data</button>
-                             <button onClick="document.getElementById('upload-data-input').click()" class="w-full bg-[#ff8ca6] text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-[#ff5c7c] transition-colors">Upload Data</button>
-                             <input type="file" id="upload-data-input" class="hidden" accept=".json">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="upload-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                Upload
+                            </button>
+                            <input type="file" id="upload-data-input" class="hidden" accept=".json">
+                            <button id="download-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Download
+                            </button>
                         </div>
                     </div>
                     <div class="pt-4 border-t">
                         <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
                     </div>
-                 </section>
+                </section>
             </div>
         </div>
     </div>
@@ -251,14 +286,14 @@
                 <!-- Daily flow selectors will be injected here -->
             </div>
             <div class="flex flex-col gap-2">
-                 <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save Period</button>
-                 <button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button>
+                <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save Period</button>
+                <button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button>
             </div>
         </div>
     </div>
     
     <div id="confirm-modal" class="modal-backdrop hidden">
-         <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
             <h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2>
             <p id="confirm-message" class="text-gray-600 mb-6"></p>
             <div id="confirm-options-container" class="flex gap-4">
@@ -267,10 +302,11 @@
         </div>
     </div>
 
-    <script type="module">
-        document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
-            const app = {
+            var app = {
                 // Tabs
                 tabButtons: document.querySelectorAll('.tab-btn'),
                 tabPanes: document.querySelectorAll('.tab-pane'),
@@ -296,6 +332,7 @@
                 saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'),
                 recalculateBtn: document.getElementById('recalculate-btn-settings'),
                 downloadBtn: document.getElementById('download-data-btn'),
+                uploadBtn: document.getElementById('upload-data-btn'),
                 uploadInput: document.getElementById('upload-data-input'),
                 resetBtn: document.getElementById('reset-data-btn'),
 
@@ -312,32 +349,35 @@
                 confirmModal: document.getElementById('confirm-modal'),
                 confirmTitle: document.getElementById('confirm-title'),
                 confirmMessage: document.getElementById('confirm-message'),
-                confirmOptions: document.getElementById('confirm-options-container'),
+                confirmOptions: document.getElementById('confirm-options-container')
             };
 
             // --- State ---
-            let currentDate = new Date();
-            let periodData = {
+            var currentDate = new Date();
+            var periodData = {
                 periods: [], // [{date: 'YYYY-MM-DD', flow: 'light'}]
-                cycleLength: 28,
+                cycleLength: 28
             };
 
-            // --- Date Helpers (Timezone Safe) ---
-            const toISODateString = (date) => {
-                const pad = (num) => (num < 10 ? '0' : '') + num;
-                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+            // --- Date Helpers ---
+            function toISODateString(date) {
+                var pad = function(num) { return (num < 10 ? '0' : '') + num; };
+                return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
             }
-            const fromISODateString = (str) => new Date(str + 'T00:00:00');
+
+            function fromISODateString(str) {
+                return new Date(str + 'T00:00:00');
+            }
 
             // --- Data Management ---
-            const loadData = () => {
-                const data = localStorage.getItem('pinkDaysData');
+            function loadData() {
+                var data = localStorage.getItem('pinkDaysData');
                 if (data) {
                     try {
-                        const parsedData = JSON.parse(data);
+                        var parsedData = JSON.parse(data);
                         if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') {
                             periodData = parsedData;
-                            periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
+                            periodData.periods.sort(function(a, b) { return a.date.localeCompare(b.date); });
                         } else {
                             throw new Error("Invalid data structure");
                         }
@@ -349,56 +389,60 @@
                 } else {
                     app.welcomeModal.classList.remove('hidden');
                 }
-            };
+            }
 
-            const saveData = () => {
+            function saveData() {
                 try {
-                    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
+                    periodData.periods.sort(function(a, b) { return a.date.localeCompare(b.date); });
                     localStorage.setItem('pinkDaysData', JSON.stringify(periodData));
                     updateAllUI();
                 } catch (error) {
                     console.error("An error occurred while saving and updating the UI:", error);
                     showConfirm("An Error Occurred", "There was a problem updating the view. Please try refreshing the page.", [{text: "OK"}]);
                 }
-            };
+            }
             
-            const updateAllUI = () => {
+            function updateAllUI() {
                 renderCalendar();
                 updateStats();
-            };
+            }
 
             // --- Tabs ---
-            const switchTab = (tabName) => {
-                app.tabPanes.forEach(pane => pane.classList.add('hidden'));
-                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-                app.tabButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabName);
+            function switchTab(tabName) {
+                app.tabPanes.forEach(function(pane) { pane.classList.add('hidden'); });
+                document.getElementById(tabName + '-tab').classList.remove('hidden');
+                app.tabButtons.forEach(function(btn) {
+                    if (btn.dataset.tab === tabName) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
                 });
-            };
+            }
 
             // --- Stats ---
-            const updateStats = () => {
-                const startDates = getPeriodStartDates();
-                const calculatedAvgCycle = calculateAverageCycleLength(startDates);
-                const effectiveCycleLength = periodData.cycleLength || calculatedAvgCycle;
-                const avgPeriod = calculateAveragePeriodLength();
+            function updateStats() {
+                var startDates = getPeriodStartDates();
+                var calculatedAvgCycle = calculateAverageCycleLength(startDates);
+                var effectiveCycleLength = periodData.cycleLength || calculatedAvgCycle;
+                var avgPeriod = calculateAveragePeriodLength();
                 
-                app.avgCycle.textContent = `${effectiveCycleLength} days`;
-                app.avgPeriod.textContent = `${avgPeriod.toFixed(1)} days`;
+                app.avgCycle.textContent = effectiveCycleLength + ' days';
+                app.avgPeriod.textContent = avgPeriod.toFixed(1) + ' days';
                 app.cycleOverrideInput.value = effectiveCycleLength;
 
-                const nextDate = getNextPredictedStartDate(startDates, effectiveCycleLength);
+                var nextDate = getNextPredictedStartDate(startDates, effectiveCycleLength);
                 if (nextDate) {
-                    const today = new Date();
+                    var today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    const diffTime = nextDate - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    var diffTime = nextDate - today;
+                    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                     if (diffDays === 0) app.countdown.textContent = "Today";
                     else if (diffDays < 0) app.countdown.textContent = "Overdue";
-                    else app.countdown.textContent = `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+                    else app.countdown.textContent = diffDays + ' day' + (diffDays !== 1 ? 's' : '');
                     
-                    app.nextDate.textContent = `(${nextDate.toLocaleDateString('default', { month: 'short', day: 'numeric' })})`;
+                    app.nextDate.textContent = '(' + nextDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) + ')';
                 } else {
                     app.countdown.textContent = '--';
                     app.nextDate.textContent = 'Log a period to see predictions';
@@ -407,125 +451,133 @@
                 renderHistory(startDates);
                 renderFlowAnalysis();
                 renderNextFertileWindow();
-            };
+            }
 
-            const renderHistory = (startDates) => {
+            function renderHistory(startDates) {
                 app.historyList.innerHTML = '';
                 if (startDates.length === 0) {
-                    app.historyList.innerHTML = `<li class="text-center text-gray-500">No periods logged yet.</li>`;
+                    app.historyList.innerHTML = '<li class="text-center text-gray-500">No periods logged yet.</li>';
                     return;
                 }
-                const periodBlocks = getPeriodBlocks(startDates);
-                periodBlocks.reverse().slice(0, 5).forEach(block => {
-                    const startDate = fromISODateString(block.start);
-                    const endDate = fromISODateString(block.end);
-                    const li = document.createElement('li');
+                var periodBlocks = getPeriodBlocks(startDates);
+                periodBlocks.reverse().slice(0, 5).forEach(function(block) {
+                    var startDate = fromISODateString(block.start);
+                    var endDate = fromISODateString(block.end);
+                    var li = document.createElement('li');
                     li.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg';
-                    li.innerHTML = `
-                        <div>
-                            <p class="font-semibold">${startDate.toLocaleDateString('default', {month: 'long', day: 'numeric'})} - ${endDate.toLocaleDateString('default', {month: 'long', day: 'numeric', year: 'numeric'})}</p>
-                            <p class="text-sm text-gray-500">${block.length} days</p>
-                        </div>
-                        <div class="text-sm font-medium text-gray-700">${block.cycleLength ? `${block.cycleLength}-day cycle` : ''}</div>
-                    `;
+                    li.innerHTML = 
+                        '<div>' +
+                            '<p class="font-semibold">' + startDate.toLocaleDateString('default', {month: 'long', day: 'numeric'}) + ' - ' + endDate.toLocaleDateString('default', {month: 'long', day: 'numeric', year: 'numeric'}) + '</p>' +
+                            '<p class="text-sm text-gray-500">' + block.length + ' days</p>' +
+                        '</div>' +
+                        '<div class="text-sm font-medium text-gray-700">' + (block.cycleLength ? block.cycleLength + '-day cycle' : '') + '</div>';
                     app.historyList.appendChild(li);
                 });
-            };
+            }
 
-            const renderFlowAnalysis = () => {
-                const flowDist = calculateFlowDistribution();
+            function renderFlowAnalysis() {
+                var flowDist = calculateFlowDistribution();
                 if (flowDist.totalDays === 0) {
-                    app.flowAnalysis.innerHTML = `<p class="text-gray-500">Log periods to see flow analysis.</p>`;
+                    app.flowAnalysis.innerHTML = '<p class="text-gray-500">Log periods to see flow analysis.</p>';
                     return;
                 }
-                app.flowAnalysis.innerHTML = `
-                    <div class="grid grid-cols-3 gap-2">
-                        <div><p class="font-semibold">Light</p><p>${flowDist.light.toFixed(1)} days</p></div>
-                        <div><p class="font-semibold">Medium</p><p>${flowDist.medium.toFixed(1)} days</p></div>
-                        <div><p class="font-semibold">Heavy</p><p>${flowDist.heavy.toFixed(1)} days</p></div>
-                    </div>
-                `;
-            };
+                app.flowAnalysis.innerHTML = 
+                    '<div class="grid grid-cols-3 gap-2">' +
+                        '<div><p class="font-semibold">Light</p><p>' + flowDist.light.toFixed(1) + ' days</p></div>' +
+                        '<div><p class="font-semibold">Medium</p><p>' + flowDist.medium.toFixed(1) + ' days</p></div>' +
+                        '<div><p class="font-semibold">Heavy</p><p>' + flowDist.heavy.toFixed(1) + ' days</p></div>' +
+                    '</div>';
+            }
 
-            const renderNextFertileWindow = () => {
-                const window = getNextFertileWindow();
+            function renderNextFertileWindow() {
+                var window = getNextFertileWindow();
                 if (window) {
-                    const start = fromISODateString(window.start);
-                    const end = fromISODateString(window.end);
-                    app.nextFertileWindow.textContent = `${start.toLocaleDateString('default', {month: 'short', day: 'numeric'})} - ${end.toLocaleDateString('default', {month: 'short', day: 'numeric'})}`;
+                    var start = fromISODateString(window.start);
+                    var end = fromISODateString(window.end);
+                    app.nextFertileWindow.textContent = start.toLocaleDateString('default', {month: 'short', day: 'numeric'}) + ' - ' + end.toLocaleDateString('default', {month: 'short', day: 'numeric'});
                 } else {
                     app.nextFertileWindow.textContent = '--';
                 }
-            };
+            }
 
             // --- Calendar ---
-            const renderCalendar = () => {
+            function renderCalendar() {
                 app.calendarGrid.innerHTML = '';
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-                app.monthYear.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+                var year = currentDate.getFullYear();
+                var month = currentDate.getMonth();
+                app.monthYear.textContent = currentDate.toLocaleString('default', { month: 'long' }) + ' ' + year;
 
-                const firstDayOfMonth = new Date(year, month, 1);
-                const lastDayOfMonth = new Date(year, month + 1, 0);
+                var firstDayOfMonth = new Date(year, month, 1);
+                var lastDayOfMonth = new Date(year, month + 1, 0);
                 
-                for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
-                    app.calendarGrid.insertAdjacentHTML('beforeend', '<div class="day disabled"></div>');
+                for (var i = 0; i < firstDayOfMonth.getDay(); i++) {
+                    var emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'day disabled';
+                    app.calendarGrid.appendChild(emptyDiv);
                 }
                 
-                const todayStr = toISODateString(new Date());
-                const predictedDates = getPredictedDates();
-                const fertileDates = getAllFertileDates();
+                var todayStr = toISODateString(new Date());
+                var predictedDates = getPredictedDates();
+                var fertileDates = getAllFertileDates();
 
-                for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
-                    const dayDate = new Date(year, month, i);
-                    const dayStr = toISODateString(dayDate);
-                    let classes = 'day cursor-pointer';
+                for (var i = 1; i <= lastDayOfMonth.getDate(); i++) {
+                    var dayDate = new Date(year, month, i);
+                    var dayStr = toISODateString(dayDate);
+                    var classes = 'day cursor-pointer';
                     
-                    const periodDay = periodData.periods.find(p => p.date === dayStr);
-                    if (periodDay) classes += ` flow-${periodDay.flow}`;
-                    else if (fertileDates.includes(dayStr)) classes += ' fertile-day';
-                    else if (predictedDates.includes(dayStr)) classes += ' predicted-day';
+                    var periodDay = periodData.periods.find(function(p) { return p.date === dayStr; });
+                    if (periodDay) {
+                        classes += ' flow-' + periodDay.flow;
+                    } else if (fertileDates.indexOf(dayStr) !== -1) {
+                        classes += ' fertile-day';
+                    } else if (predictedDates.indexOf(dayStr) !== -1) {
+                        classes += ' predicted-day';
+                    }
                     
                     if (dayStr === todayStr) classes += ' today';
                     if (dayDate.getDay() === 0) classes += ' sunday-text';
                     
-                    const dayEl = document.createElement('div');
+                    var dayEl = document.createElement('div');
                     dayEl.textContent = i;
                     dayEl.className = classes;
-                    dayEl.addEventListener('click', () => {
-                        const block = findPeriodBlockForDate(dayStr);
-                        showLogPeriodModal(block ? block.start : dayStr, block ? block.end : dayStr);
-                    });
+                    dayEl.addEventListener('click', (function(dateStr) {
+                        return function() {
+                            var block = findPeriodBlockForDate(dateStr);
+                            showLogPeriodModal(block ? block.start : dateStr, block ? block.end : dateStr);
+                        };
+                    })(dayStr));
                     app.calendarGrid.appendChild(dayEl);
                 }
-            };
+            }
 
-            // --- Prediction Logic (Robust) ---
-            const getPeriodStartDates = () => {
-                const cycleStarts = [];
+            // --- Prediction Logic ---
+            function getPeriodStartDates() {
+                var cycleStarts = [];
                 if (periodData.periods.length === 0) return [];
                 
                 cycleStarts.push(periodData.periods[0].date);
-                for (let i = 1; i < periodData.periods.length; i++) {
-                    const prevDate = fromISODateString(periodData.periods[i - 1].date);
-                    const currDate = fromISODateString(periodData.periods[i].date);
-                    const diffDays = (currDate - prevDate) / (1000 * 60 * 60 * 24);
+                for (var i = 1; i < periodData.periods.length; i++) {
+                    var prevDate = fromISODateString(periodData.periods[i - 1].date);
+                    var currDate = fromISODateString(periodData.periods[i].date);
+                    var diffDays = (currDate - prevDate) / (1000 * 60 * 60 * 24);
                     if (diffDays > 1) cycleStarts.push(periodData.periods[i].date);
                 }
-                return [...new Set(cycleStarts)];
-            };
+                return cycleStarts.filter(function(value, index, self) {
+                    return self.indexOf(value) === index;
+                });
+            }
 
-            const getPeriodBlocks = (startDates) => {
-                return startDates.map((start, i) => {
-                    let endDate = start;
-                    let length = 1;
-                    let currentDate = fromISODateString(start);
+            function getPeriodBlocks(startDates) {
+                return startDates.map(function(start, i) {
+                    var endDate = start;
+                    var length = 1;
+                    var currentDate = fromISODateString(start);
                     
-                    while (true) {
-                        const nextDay = new Date(currentDate);
+                    while(true) {
+                        var nextDay = new Date(currentDate);
                         nextDay.setDate(nextDay.getDate() + 1);
-                        const nextDayStr = toISODateString(nextDay);
-                        if (periodData.periods.find(p => p.date === nextDayStr)) {
+                        var nextDayStr = toISODateString(nextDay);
+                        if (periodData.periods.find(function(p) { return p.date === nextDayStr; })) {
                             endDate = nextDayStr;
                             length++;
                             currentDate = nextDay;
@@ -533,39 +585,39 @@
                             break;
                         }
                     }
-                    const cycleLength = i > 0 ? (fromISODateString(start) - fromISODateString(startDates[i-1])) / (1000 * 60 * 60 * 24) : null;
-                    return { start, end: endDate, length, cycleLength };
+                    var cycleLength = i > 0 ? (fromISODateString(start) - fromISODateString(startDates[i-1])) / (1000 * 60 * 60 * 24) : null;
+                    return { start: start, end: endDate, length: length, cycleLength: cycleLength };
                 });
-            };
+            }
             
-            const findPeriodBlockForDate = (dateStr) => {
-                if (!periodData.periods.find(p => p.date === dateStr)) return null;
-                const blocks = getPeriodBlocks(getPeriodStartDates());
-                return blocks.find(b => dateStr >= b.start && dateStr <= b.end);
-            };
+            function findPeriodBlockForDate(dateStr) {
+                if (!periodData.periods.find(function(p) { return p.date === dateStr; })) return null;
+                var blocks = getPeriodBlocks(getPeriodStartDates());
+                return blocks.find(function(b) { return dateStr >= b.start && dateStr <= b.end; });
+            }
 
-            const calculateAverageCycleLength = (startDates) => {
+            function calculateAverageCycleLength(startDates) {
                 if (startDates.length < 2) return periodData.cycleLength || 28;
-                let totalDiff = 0;
-                for (let i = 1; i < startDates.length; i++) {
+                var totalDiff = 0;
+                for (var i = 1; i < startDates.length; i++) {
                     totalDiff += (fromISODateString(startDates[i]) - fromISODateString(startDates[i-1]));
                 }
-                const avg = Math.round(totalDiff / (1000 * 60 * 60 * 24) / (startDates.length - 1));
+                var avg = Math.round(totalDiff / (1000 * 60 * 60 * 24) / (startDates.length - 1));
                 return avg > 10 ? avg : (periodData.cycleLength || 28);
-            };
+            }
 
-            const calculateAveragePeriodLength = () => {
-                const blocks = getPeriodBlocks(getPeriodStartDates());
+            function calculateAveragePeriodLength() {
+                var blocks = getPeriodBlocks(getPeriodStartDates());
                 if (blocks.length === 0) return 0;
-                const totalLength = blocks.reduce((sum, b) => sum + b.length, 0);
+                var totalLength = blocks.reduce(function(sum, b) { return sum + b.length; }, 0);
                 return totalLength / blocks.length;
-            };
+            }
 
-            const calculateFlowDistribution = () => {
-                const blocks = getPeriodBlocks(getPeriodStartDates());
+            function calculateFlowDistribution() {
+                var blocks = getPeriodBlocks(getPeriodStartDates());
                 if (blocks.length === 0) return { light: 0, medium: 0, heavy: 0, totalDays: 0 };
-                const counts = { light: 0, medium: 0, heavy: 0 };
-                periodData.periods.forEach(p => {
+                var counts = { light: 0, medium: 0, heavy: 0 };
+                periodData.periods.forEach(function(p) {
                     if (counts.hasOwnProperty(p.flow)) {
                         counts[p.flow]++;
                     }
@@ -576,155 +628,197 @@
                     heavy: counts.heavy / blocks.length,
                     totalDays: periodData.periods.length
                 };
-            };
+            }
 
-            const getNextPredictedStartDate = (startDates, cycleLen) => {
+            function getNextPredictedStartDate(startDates, cycleLen) {
                 if (startDates.length === 0) return null;
-                const lastStartDate = fromISODateString(startDates[startDates.length - 1]);
+                var lastStartDate = fromISODateString(startDates[startDates.length - 1]);
                 lastStartDate.setDate(lastStartDate.getDate() + cycleLen);
                 return lastStartDate;
-            };
+            }
             
-            const getPredictedDates = () => {
-                const nextStartDate = getNextPredictedStartDate(getPeriodStartDates(), periodData.cycleLength);
+            function getPredictedDates() {
+                var nextStartDate = getNextPredictedStartDate(getPeriodStartDates(), periodData.cycleLength);
                 if (!nextStartDate) return [];
-                const dates = [];
-                for (let i = 0; i < Math.round(calculateAveragePeriodLength()) || 5; i++) {
-                    const date = new Date(nextStartDate);
+                var dates = [];
+                var avgPeriodLength = Math.round(calculateAveragePeriodLength()) || 5;
+                for (var i = 0; i < avgPeriodLength; i++) {
+                    var date = new Date(nextStartDate);
                     date.setDate(date.getDate() + i);
                     dates.push(toISODateString(date));
                 }
                 return dates;
-            };
+            }
 
-            const getNextFertileWindow = () => {
-                const nextStartDate = getNextPredictedStartDate(getPeriodStartDates(), periodData.cycleLength);
+            function getNextFertileWindow() {
+                var nextStartDate = getNextPredictedStartDate(getPeriodStartDates(), periodData.cycleLength);
                 if (!nextStartDate) return null;
-                const ovulationDay = new Date(nextStartDate);
+                var ovulationDay = new Date(nextStartDate);
                 ovulationDay.setDate(ovulationDay.getDate() - 14);
-                const windowStart = new Date(ovulationDay);
+                var windowStart = new Date(ovulationDay);
                 windowStart.setDate(windowStart.getDate() - 5);
                 return { start: toISODateString(windowStart), end: toISODateString(ovulationDay) };
-            };
+            }
 
-            const getAllFertileDates = () => {
-                const startDates = getPeriodStartDates();
-                const fertileDatesSet = new Set();
-                const addWindow = (cycleEndDate) => {
+            function getAllFertileDates() {
+                var startDates = getPeriodStartDates();
+                var fertileDatesSet = [];
+                
+                function addWindow(cycleEndDate) {
                     if (!cycleEndDate) return;
-                    const ovulationDay = new Date(cycleEndDate);
+                    var ovulationDay = new Date(cycleEndDate);
                     ovulationDay.setDate(ovulationDay.getDate() - 14);
-                    for (let i = 5; i >= 0; i--) {
-                        const date = new Date(ovulationDay);
+                    for (var i = 5; i >= 0; i--) {
+                        var date = new Date(ovulationDay);
                         date.setDate(date.getDate() - i);
-                        fertileDatesSet.add(toISODateString(date));
+                        var dateStr = toISODateString(date);
+                        if (fertileDatesSet.indexOf(dateStr) === -1) {
+                            fertileDatesSet.push(dateStr);
+                        }
                     }
-                };
+                }
+                
                 if (startDates.length >= 1) {
-                    for (let i = 1; i < startDates.length; i++) addWindow(fromISODateString(startDates[i]));
+                    for (var i = 1; i < startDates.length; i++) {
+                        addWindow(fromISODateString(startDates[i]));
+                    }
                 }
                 addWindow(getNextPredictedStartDate(startDates, periodData.cycleLength));
-                return Array.from(fertileDatesSet);
-            };
+                return fertileDatesSet;
+            }
             
             // --- Modals ---
-            const showLogPeriodModal = (start, end) => {
+            function showLogPeriodModal(start, end) {
                 app.startDateInput.value = start;
                 app.endDateInput.value = end;
                 updateDailyFlowSelectors();
                 app.logModal.classList.remove('hidden');
-            };
+            }
             
-            const updateDailyFlowSelectors = () => {
+            function updateDailyFlowSelectors() {
                 app.dailyFlowContainer.innerHTML = '';
-                const start = fromISODateString(app.startDateInput.value);
-                const end = fromISODateString(app.endDateInput.value);
+                var start = fromISODateString(app.startDateInput.value);
+                var end = fromISODateString(app.endDateInput.value);
                 if (!app.startDateInput.value || !app.endDateInput.value || start > end) return;
                 
-                let current = new Date(start);
+                var current = new Date(start);
                 while(current <= end) {
-                    const dayStr = toISODateString(current);
-                    const existingLog = periodData.periods.find(p => p.date === dayStr);
-                    const flow = existingLog ? existingLog.flow : 'medium';
+                    var dayStr = toISODateString(current);
+                    var existingLog = periodData.periods.find(function(p) { return p.date === dayStr; });
+                    var flow = existingLog ? existingLog.flow : 'medium';
                     
-                    const dayEl = document.createElement('div');
+                    var dayEl = document.createElement('div');
                     dayEl.className = 'flex justify-between items-center bg-white p-2 rounded';
-                    dayEl.innerHTML = `
-                        <span class="text-sm font-medium">${current.toLocaleDateString('default', {weekday: 'short', month: 'short', day: 'numeric'})}</span>
-                        <div class="flex gap-1" data-date="${dayStr}">
-                            <button data-flow="light" class="px-3 py-1 text-xs rounded ${flow === 'light' ? 'flow-light' : 'bg-gray-200'}">Light</button>
-                            <button data-flow="medium" class="px-3 py-1 text-xs rounded ${flow === 'medium' ? 'flow-medium' : 'bg-gray-200'}">Medium</button>
-                            <button data-flow="heavy" class="px-3 py-1 text-xs rounded ${flow === 'heavy' ? 'flow-heavy' : 'bg-gray-200'}">Heavy</button>
-                        </div>
-                    `;
+                    dayEl.innerHTML = 
+                        '<span class="text-sm font-medium">' + current.toLocaleDateString('default', {weekday: 'short', month: 'short', day: 'numeric'}) + '</span>' +
+                        '<div class="flex gap-1" data-date="' + dayStr + '">' +
+                            '<button data-flow="light" class="px-3 py-1 text-xs rounded ' + (flow === 'light' ? 'flow-light' : 'bg-gray-200') + '">Light</button>' +
+                            '<button data-flow="medium" class="px-3 py-1 text-xs rounded ' + (flow === 'medium' ? 'flow-medium' : 'bg-gray-200') + '">Medium</button>' +
+                            '<button data-flow="heavy" class="px-3 py-1 text-xs rounded ' + (flow === 'heavy' ? 'flow-heavy' : 'bg-gray-200') + '">Heavy</button>' +
+                        '</div>';
                     app.dailyFlowContainer.appendChild(dayEl);
                     current.setDate(current.getDate() + 1);
                 }
-            };
+            }
 
-            const showConfirm = (title, message, options) => {
+            function showConfirm(title, message, options) {
                 app.confirmTitle.textContent = title;
                 app.confirmMessage.textContent = message;
                 app.confirmOptions.innerHTML = '';
-                options.forEach(({text, action, style = 'main-gradient-box'}) => {
-                    const btn = document.createElement('button');
-                    btn.textContent = text;
-                    btn.className = `w-full text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity ${style}`;
-                    if (style === 'cancel') btn.className = 'w-full bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300';
-                    btn.onclick = () => {
-                        if (action) action();
+                options.forEach(function(option) {
+                    var btn = document.createElement('button');
+                    btn.textContent = option.text;
+                    var style = option.style || 'main-gradient-box';
+                    if (style === 'cancel') {
+                        btn.className = 'w-full bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300';
+                    } else if (style === 'bg-red-600') {
+                        btn.className = 'w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors';
+                    } else {
+                        btn.className = 'w-full text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity ' + style;
+                    }
+                    btn.onclick = function() {
+                        if (option.action) option.action();
                         app.confirmModal.classList.add('hidden');
                     };
                     app.confirmOptions.appendChild(btn);
                 });
                 app.confirmModal.classList.remove('hidden');
-            };
+            }
             
             // --- Event Listeners ---
-            app.tabButtons.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-            app.prevBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
-            app.nextBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
-            app.logPeriodBtn.addEventListener('click', () => showLogPeriodModal(toISODateString(new Date()), toISODateString(new Date())));
-            
-            app.closeWelcomeBtn.addEventListener('click', () => app.welcomeModal.classList.add('hidden'));
+            app.tabButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    switchTab(btn.dataset.tab);
+                });
+            });
 
-            [app.startDateInput, app.endDateInput].forEach(input => input.addEventListener('change', updateDailyFlowSelectors));
-            app.dailyFlowContainer.addEventListener('click', (e) => {
+            app.prevBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            app.nextBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            app.logPeriodBtn.addEventListener('click', function() {
+                var today = toISODateString(new Date());
+                showLogPeriodModal(today, today);
+            });
+            
+            app.closeWelcomeBtn.addEventListener('click', function() {
+                app.welcomeModal.classList.add('hidden');
+            });
+
+            app.startDateInput.addEventListener('change', updateDailyFlowSelectors);
+            app.endDateInput.addEventListener('change', updateDailyFlowSelectors);
+
+            app.dailyFlowContainer.addEventListener('click', function(e) {
                 if (e.target.tagName === 'BUTTON') {
-                    e.target.parentElement.querySelectorAll('button').forEach(b => {
+                    var buttons = e.target.parentElement.querySelectorAll('button');
+                    buttons.forEach(function(b) {
                         b.classList.remove('flow-light', 'flow-medium', 'flow-heavy');
                         b.classList.add('bg-gray-200');
                     });
                     e.target.classList.remove('bg-gray-200');
-                    e.target.classList.add(`flow-${e.target.dataset.flow}`);
+                    e.target.classList.add('flow-' + e.target.dataset.flow);
                 }
             });
             
-            app.saveLogBtn.addEventListener('click', () => {
-                const start = app.startDateInput.value;
-                const end = app.endDateInput.value;
+            app.saveLogBtn.addEventListener('click', function() {
+                var start = app.startDateInput.value;
+                var end = app.endDateInput.value;
                 if (!start || !end || fromISODateString(start) > fromISODateString(end)) {
                     showConfirm("Invalid Dates", "Please ensure the start date is not after the end date.", [{text: "OK"}]);
                     return;
                 }
-                periodData.periods = periodData.periods.filter(p => p.date < start || p.date > end);
-                app.dailyFlowContainer.querySelectorAll('.flex[data-date]').forEach(row => {
-                    const date = row.dataset.date;
-                    const selectedBtn = row.querySelector('button[class*="flow-"]');
+                
+                periodData.periods = periodData.periods.filter(function(p) {
+                    return p.date < start || p.date > end;
+                });
+                
+                var flowRows = app.dailyFlowContainer.querySelectorAll('[data-date]');
+                flowRows.forEach(function(row) {
+                    var date = row.dataset.date;
+                    var selectedBtn = row.querySelector('button[class*="flow-"]');
                     if(selectedBtn) {
-                        const flow = selectedBtn.dataset.flow;
-                        periodData.periods.push({date, flow});
+                        var flow = selectedBtn.dataset.flow;
+                        periodData.periods.push({date: date, flow: flow});
                     }
                 });
+                
                 saveData();
                 app.logModal.classList.add('hidden');
             });
             
-            app.cancelLogBtn.addEventListener('click', () => app.logModal.classList.add('hidden'));
+            app.cancelLogBtn.addEventListener('click', function() {
+                app.logModal.classList.add('hidden');
+            });
 
             // Settings Listeners
-            app.saveCycleOverrideBtn.addEventListener('click', () => {
-                const val = parseInt(app.cycleOverrideInput.value);
+            app.saveCycleOverrideBtn.addEventListener('click', function() {
+                var val = parseInt(app.cycleOverrideInput.value);
                 if (val > 10) {
                     periodData.cycleLength = val;
                     saveData();
@@ -733,46 +827,66 @@
                     showConfirm("Invalid Input", "Please enter a cycle length greater than 10 days.", [{text: "OK"}]);
                 }
             });
-            app.recalculateBtn.addEventListener('click', () => {
-                 const avg = calculateAverageCycleLength(getPeriodStartDates());
-                 periodData.cycleLength = avg;
-                 app.cycleOverrideInput.value = avg;
-                 saveData();
-                 showConfirm("Success", `Cycle length has been recalculated to ${avg} days.`, [{text: "OK"}]);
+
+            app.recalculateBtn.addEventListener('click', function() {
+                var avg = calculateAverageCycleLength(getPeriodStartDates());
+                periodData.cycleLength = avg;
+                app.cycleOverrideInput.value = avg;
+                saveData();
+                showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
             });
-            app.downloadBtn.addEventListener('click', () => {
-                const dataStr = JSON.stringify(periodData, null, 2);
-                const blob = new Blob([dataStr], {type: "application/json"});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
+
+            app.downloadBtn.addEventListener('click', function() {
+                var dataStr = JSON.stringify(periodData, null, 2);
+                var blob = new Blob([dataStr], {type: "application/json"});
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
                 a.href = url;
-                a.download = `pinkdays_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = 'pinkdays_backup_' + new Date().toISOString().split('T')[0] + '.json';
                 a.click();
                 URL.revokeObjectURL(url);
             });
-            app.uploadInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
+
+            app.uploadBtn.addEventListener('click', function() {
+                app.uploadInput.click();
+            });
+
+            app.uploadInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
                 if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
+                var reader = new FileReader();
+                reader.onload = function(event) {
                     try {
-                        const uploadedData = JSON.parse(event.target.result);
-                        if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) throw new Error("Invalid file format");
+                        var uploadedData = JSON.parse(event.target.result);
+                        if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) {
+                            throw new Error("Invalid file format");
+                        }
                         
                         showConfirm("Upload Data", "How do you want to handle the uploaded data? Merging will keep your existing data and add/overwrite with new data.", [
-                            { text: "Merge", action: () => {
-                                const newPeriods = new Map(periodData.periods.map(p => [p.date, p]));
-                                uploadedData.periods.forEach(p => newPeriods.set(p.date, p));
-                                periodData.periods = Array.from(newPeriods.values());
-                                periodData.cycleLength = uploadedData.cycleLength;
-                                saveData();
-                                showConfirm("Success", "Data has been merged.", [{text: "OK"}]);
-                            }},
-                            { text: "Overwrite", action: () => {
-                                periodData = uploadedData;
-                                saveData();
-                                showConfirm("Success", "Data has been overwritten.", [{text: "OK"}]);
-                            }},
+                            { 
+                                text: "Merge", 
+                                action: function() {
+                                    var newPeriods = {};
+                                    periodData.periods.forEach(function(p) {
+                                        newPeriods[p.date] = p;
+                                    });
+                                    uploadedData.periods.forEach(function(p) {
+                                        newPeriods[p.date] = p;
+                                    });
+                                    periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function(key) { return newPeriods[key]; });
+                                    periodData.cycleLength = uploadedData.cycleLength;
+                                    saveData();
+                                    showConfirm("Success", "Data has been merged.", [{text: "OK"}]);
+                                }
+                            },
+                            { 
+                                text: "Overwrite", 
+                                action: function() {
+                                    periodData = uploadedData;
+                                    saveData();
+                                    showConfirm("Success", "Data has been overwritten.", [{text: "OK"}]);
+                                }
+                            },
                             { text: "Cancel", style: 'cancel' }
                         ]);
 
@@ -783,14 +897,19 @@
                 reader.readAsText(file);
                 e.target.value = '';
             });
-            app.resetBtn.addEventListener('click', () => {
+
+            app.resetBtn.addEventListener('click', function() {
                 showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [
                     { text: "Cancel", style: 'cancel' },
-                    { text: "Yes, Reset", action: () => {
-                        localStorage.removeItem('pinkDaysData');
-                        periodData = { periods: [], cycleLength: 28 };
-                        saveData();
-                    }, style: 'bg-red-600'}
+                    { 
+                        text: "Yes, Reset", 
+                        action: function() {
+                            localStorage.removeItem('pinkDaysData');
+                            periodData = { periods: [], cycleLength: 28 };
+                            saveData();
+                        }, 
+                        style: 'bg-red-600'
+                    }
                 ]);
             });
 
