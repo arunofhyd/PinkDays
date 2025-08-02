@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PinkDays</title>
     
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Apple-specific meta tags for Add to Homescreen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PinkDays">
+
     <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
@@ -233,6 +241,7 @@
                     <div class="pt-4 border-t">
                         <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
                     </div>
+                    <p class="text-center text-gray-400 text-xs pt-4">Made with ❤️ by Arun Thomas</p>
                 </section>
             </div>
         </div>
@@ -829,11 +838,11 @@
             });
 
             app.recalculateBtn.addEventListener('click', function() {
-                var avg = calculateAverageCycleLength(getPeriodStartDates());
-                periodData.cycleLength = avg;
-                app.cycleOverrideInput.value = avg;
-                saveData();
-                showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
+                 var avg = calculateAverageCycleLength(getPeriodStartDates());
+                 periodData.cycleLength = avg;
+                 app.cycleOverrideInput.value = avg;
+                 saveData();
+                 showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
             });
 
             app.downloadBtn.addEventListener('click', function() {
