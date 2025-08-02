@@ -1,0 +1,21 @@
+{
+    "name": "PinkDays",
+    "short_name": "PinkDays",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ff5c7c",
+    "description": "A simple and private period tracker.",
+    "icons": [
+        {
+            "src": "pinkdays_logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "pinkdays_logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
