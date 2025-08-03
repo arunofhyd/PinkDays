@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PinkDays</title>
     
-    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Apple-specific meta tags for Add to Homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
 
-    <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
@@ -91,6 +88,8 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -111,6 +110,20 @@
         .hidden {
             display: none !important;
         }
+        .month-picker-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.15s;
+        }
+        .month-picker-btn:hover {
+            background-color: #f3f4f6;
+        }
+        .month-picker-btn.active {
+            background-color: #ff5c7c;
+            color: white;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -128,7 +141,6 @@
         </nav>
 
         <div id="tab-content">
-            <!-- Stats Tab -->
             <div id="stats-tab" class="tab-pane space-y-6">
                 <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
@@ -163,7 +175,6 @@
                 </section>
             </div>
 
-            <!-- Calendar Tab -->
             <div id="calendar-tab" class="tab-pane hidden">
                 <main class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-4">
@@ -172,7 +183,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                         </button>
-                        <h2 id="month-year" class="text-xl font-semibold"></h2>
+                        <h2 id="month-year" class="text-xl font-semibold main-gradient-text cursor-pointer hover:underline"></h2>
                         <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -206,7 +217,6 @@
                 </main>
             </div>
 
-            <!-- Settings Tab -->
             <div id="settings-tab" class="tab-pane hidden">
                 <section class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
                     <h3 class="text-xl font-semibold text-center mb-4">Data Management</h3>
@@ -228,16 +238,16 @@
                                     Import
                                 </button>
                                 <input type="file" id="upload-data-input" class="hidden" accept=".json">
-                                <p class="text-xs text-gray-500 mt-1">Restore data from a backup file.</p>
+                                <p class="text-xs text-gray-500 mt-1">Import a backup file to this device.</p>
                             </div>
                             <div class="flex-1 text-center">
                                 <button id="export-data-btn" class="w-full flex items-center justify-center gap-2 bg-pink-400 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-pink-500 transition-colors">
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                     </svg>
                                     Export
                                 </button>
-                                <p class="text-xs text-gray-500 mt-1">Download data to a backup file.</p>
+                                <p class="text-xs text-gray-500 mt-1">Export your data to a backup file.</p>
                             </div>
                         </div>
                     </div>
@@ -311,6 +321,25 @@
         </div>
     </div>
     
+    <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs">
+            <div class="flex justify-between items-center mb-4">
+                <button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3>
+                <button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+            <div id="month-grid" class="grid grid-cols-4 gap-2">
+                </div>
+            <div class="flex justify-end mt-4">
+                <button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div id="confirm-modal" class="modal-backdrop hidden">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
             <h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2>
@@ -321,7 +350,6 @@
     </div>
 
     <script>
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
             var app = {
@@ -364,6 +392,13 @@
                 saveLogBtn: document.getElementById('save-log-btn'),
                 cancelLogBtn: document.getElementById('cancel-log-btn'),
                 
+                monthPickerModal: document.getElementById('month-picker-modal'),
+                prevYearBtn: document.getElementById('prev-year-btn'),
+                nextYearBtn: document.getElementById('next-year-btn'),
+                pickerYearDisplay: document.getElementById('picker-year-display'),
+                monthGrid: document.getElementById('month-grid'),
+                closeMonthPickerBtn: document.getElementById('close-month-picker-btn'),
+
                 confirmModal: document.getElementById('confirm-modal'),
                 confirmTitle: document.getElementById('confirm-title'),
                 confirmMessage: document.getElementById('confirm-message'),
@@ -372,6 +407,7 @@
 
             // --- State ---
             var currentDate = new Date();
+            var pickerYear = new Date().getFullYear();
             var periodData = {
                 periods: [], // [{date: 'YYYY-MM-DD', flow: 'light'}]
                 cycleLength: 28
@@ -565,6 +601,37 @@
                         };
                     })(dayStr));
                     app.calendarGrid.appendChild(dayEl);
+                }
+            }
+            
+            // --- Month Picker Logic ---
+            function openMonthPicker() {
+                pickerYear = currentDate.getFullYear();
+                app.monthPickerModal.classList.remove('hidden');
+                renderMonthGrid();
+            }
+
+            function renderMonthGrid() {
+                app.monthGrid.innerHTML = '';
+                app.pickerYearDisplay.textContent = pickerYear;
+                var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                for (var i = 0; i < 12; i++) {
+                    var monthBtn = document.createElement('button');
+                    monthBtn.textContent = monthNames[i];
+                    monthBtn.className = 'month-picker-btn';
+                    if (i === currentDate.getMonth() && pickerYear === currentDate.getFullYear()) {
+                        monthBtn.classList.add('active');
+                    }
+                    monthBtn.addEventListener('click', (function(monthIndex) {
+                        return function() {
+                            currentDate.setFullYear(pickerYear);
+                            currentDate.setMonth(monthIndex);
+                            renderCalendar();
+                            app.monthPickerModal.classList.add('hidden');
+                        };
+                    })(i));
+                    app.monthGrid.appendChild(monthBtn);
                 }
             }
 
@@ -781,6 +848,23 @@
                 renderCalendar();
             });
 
+            // Added listener for the month/year header to open the month picker
+            app.monthYear.addEventListener('click', openMonthPicker);
+
+            app.prevYearBtn.addEventListener('click', function() {
+                pickerYear--;
+                renderMonthGrid();
+            });
+
+            app.nextYearBtn.addEventListener('click', function() {
+                pickerYear++;
+                renderMonthGrid();
+            });
+
+            app.closeMonthPickerBtn.addEventListener('click', function() {
+                app.monthPickerModal.classList.add('hidden');
+            });
+
             app.logPeriodBtn.addEventListener('click', function() {
                 var today = toISODateString(new Date());
                 showLogPeriodModal(today, today);
@@ -800,7 +884,7 @@
                         var row = button.closest('.flex[data-date]');
                         var dateToDelete = row.dataset.date;
                         periodData.periods = periodData.periods.filter(p => p.date !== dateToDelete);
-                        row.parentElement.remove(); // Remove the row from the UI
+                        row.remove(); // Remove the row from the UI
                     } else if (button.dataset.flow) {
                         var buttons = button.parentElement.querySelectorAll('button[data-flow]');
                         buttons.forEach(function(b) {
