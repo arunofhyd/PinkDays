@@ -16,7 +16,7 @@
   Log your period, flow intensity, and view past and upcoming cycles in a clean visual layout.
 
 - 📊 **Insightful Statistics**  
-  Track your average cycle length, period duration, and flow patterns with easy-to-understand graphs.
+  Track your average cycle length, period duration, and flow patterns with easy-to-understand data points.
 
 - 🔒 **Privacy-First Design**  
   Your data stays 100% on your device, stored securely in your browser. Nothing is ever uploaded or shared.
