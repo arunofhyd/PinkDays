@@ -149,11 +149,11 @@
                 <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
                     <p id="next-period-countdown" class="text-5xl font-bold">--</p>
-                    <p id="next-period-date" class="text-sm opacity-80 h-5"></p>
+                    <p id="next-period-date" class="text-lg opacity-80 h-5 mt-2"></p>
                 </section>
                 <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-700">Next Fertile Window</h3>
-                    <p id="next-fertile-window" class="text-xl font-bold main-gradient-text">--</p>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-700">Fertile During</h3>
+                    <p id="next-fertile-window" class="text-2xl font-bold main-gradient-text">--</p>
                 </section>
                 <section class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="grid grid-cols-2 gap-4 text-center">
@@ -167,16 +167,25 @@
                         </div>
                     </div>
                 </section>
-                <section class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
-                    <div id="flow-analysis" class="text-center text-gray-600">
-                        </div>
-                </section>
-                <section class="bg-white p-6 rounded-2xl shadow-lg">
-                    <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
-                    <ul id="period-history-list" class="space-y-3">
-                        </ul>
-                </section>
+                
+                <!-- Expanded Analysis Section (Hidden by Default) -->
+                <div id="detailed-analysis" class="hidden space-y-6">
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
+                        <div id="flow-analysis" class="text-center text-gray-600">
+                            </div>
+                    </section>
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
+                        <ul id="period-history-list" class="space-y-3">
+                            </ul>
+                    </section>
+                </div>
+                <div class="text-center mt-6">
+                    <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full shadow-sm hover:opacity-90 transition-opacity">
+                        Detailed analysis <span id="analysis-arrow" class="text-2xl leading-none font-light">+</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Calendar Tab -->
@@ -237,7 +246,7 @@
                                     Import
                                 </button>
                                 <input type="file" id="upload-data-input" class="hidden" accept=".json">
-                                <p class="text-xs text-gray-500 mt-1">Import a backup file to this device.</p>
+                                <p class="text-xs text-gray-500 mt-1">Restore data from a backup file.</p>
                             </div>
 
                             <!-- Export Button -->
@@ -248,7 +257,7 @@
                                     </svg>
                                     Export
                                 </button>
-                                <p class="text-xs text-gray-500 mt-1">Export your data to a backup file.</p>
+                                <p class="text-xs text-gray-500 mt-1">Download data to a backup file.</p>
                             </div>
                         </div>
                     </section>
@@ -295,7 +304,7 @@
     <div id="welcome-modal" class="modal-backdrop hidden">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
             <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'">
-            <h2 class="text-2xl font-bold mb-4">Welcome to PinkDays!</h2>
+            <h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2>
             <p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p>
             <ul class="text-left space-y-3 mb-8">
                 <li class="flex items-center">
@@ -388,6 +397,9 @@
                 avgPeriod: document.getElementById('avg-period-length'),
                 flowAnalysis: document.getElementById('flow-analysis'),
                 historyList: document.getElementById('period-history-list'),
+                detailedAnalysis: document.getElementById('detailed-analysis'),
+                showAnalysisBtn: document.getElementById('show-analysis-btn'),
+                analysisArrow: document.getElementById('analysis-arrow'),
 
                 // Calendar
                 calendarGrid: document.getElementById('calendar-grid'),
@@ -542,13 +554,12 @@
                     var startDate = fromISODateString(block.start);
                     var endDate = fromISODateString(block.end);
                     var li = document.createElement('li');
-                    li.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg';
+                    li.className = 'flex items-center space-x-2 bg-gray-50 p-3 rounded-lg';
                     li.innerHTML = 
                         '<div>' +
                             '<p class="font-semibold">' + startDate.toLocaleDateString('default', {month: 'long', day: 'numeric'}) + ' - ' + endDate.toLocaleDateString('default', {month: 'long', day: 'numeric', year: 'numeric'}) + '</p>' +
-                            '<p class="text-sm text-gray-500">' + block.length + ' days</p>' +
-                        '</div>' +
-                        '<div class="text-sm font-medium text-gray-700">' + (block.cycleLength ? block.cycleLength + '-day cycle' : '') + '</div>';
+                            '<p class="text-sm text-gray-500">' + block.length + ' days' + (block.cycleLength ? ' (' + block.cycleLength + '-day cycle)' : '') + '</p>' +
+                        '</div>';
                     app.historyList.appendChild(li);
                 });
             }
@@ -556,15 +567,33 @@
             function renderFlowAnalysis() {
                 var flowDist = calculateFlowDistribution();
                 if (flowDist.totalDays === 0) {
-                    app.flowAnalysis.innerHTML = '<p class="text-gray-500">Log periods to see flow analysis.</p>';
+                    app.flowAnalysis.innerHTML = '<p class="text-center text-gray-500">Log periods to see flow analysis.</p>';
                     return;
                 }
                 app.flowAnalysis.innerHTML = 
-                    '<div class="grid grid-cols-3 gap-2">' +
-                        '<div><p class="font-semibold">Light</p><p>' + flowDist.light.toFixed(1) + ' days</p></div>' +
-                        '<div><p class="font-semibold">Medium</p><p>' + flowDist.medium.toFixed(1) + ' days</p></div>' +
-                        '<div><p class="font-semibold">Heavy</p><p>' + flowDist.heavy.toFixed(1) + ' days</p></div>' +
-                    '</div>';
+                    `<div class="space-y-3">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="font-semibold flex-grow-0 w-20">Light:</span>
+                            <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2">
+                                <div class="h-full bg-pink-300" style="width: ${(flowDist.light / flowDist.totalDays) * 100}%;"></div>
+                            </div>
+                            <span class="w-16 text-right flex-grow-0">${flowDist.light.toFixed(1)} days</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="font-semibold flex-grow-0 w-20">Medium:</span>
+                            <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2">
+                                <div class="h-full bg-pink-400" style="width: ${(flowDist.medium / flowDist.totalDays) * 100}%;"></div>
+                            </div>
+                            <span class="w-16 text-right flex-grow-0">${flowDist.medium.toFixed(1)} days</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="font-semibold flex-grow-0 w-20">Heavy:</span>
+                            <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2">
+                                <div class="h-full bg-pink-500" style="width: ${(flowDist.heavy / flowDist.totalDays) * 100}%;"></div>
+                            </div>
+                            <span class="w-16 text-right flex-grow-0">${flowDist.heavy.toFixed(1)} days</span>
+                        </div>
+                    </div>`;
             }
 
             function renderNextFertileWindow() {
@@ -572,7 +601,7 @@
                 if (window) {
                     var start = fromISODateString(window.start);
                     var end = fromISODateString(window.end);
-                    app.nextFertileWindow.textContent = start.toLocaleDateString('default', {month: 'short', day: 'numeric'}) + ' - ' + end.toLocaleDateString('default', {month: 'short', day: 'numeric'});
+                    app.nextFertileWindow.innerHTML = `<span class="text-2xl">${start.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span> - <span class="text-2xl">${end.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span>`;
                 } else {
                     app.nextFertileWindow.textContent = '--';
                 }
@@ -895,6 +924,16 @@
             
             app.closeWelcomeBtn.addEventListener('click', function() {
                 app.welcomeModal.classList.add('hidden');
+            });
+
+            // Toggles the visibility of the detailed analysis section and changes the arrow icon
+            app.showAnalysisBtn.addEventListener('click', function() {
+                app.detailedAnalysis.classList.toggle('hidden');
+                if (app.detailedAnalysis.classList.contains('hidden')) {
+                    app.analysisArrow.textContent = '+';
+                } else {
+                    app.analysisArrow.textContent = '−';
+                }
             });
 
             app.startDateInput.addEventListener('change', updateDailyFlowSelectors);
