@@ -153,7 +153,7 @@
                 </section>
                 <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
                     <h3 class="text-lg font-semibold mb-2 text-gray-700">Fertile During</h3>
-                    <p id="next-fertile-window" class="text-2xl font-bold main-gradient-text">--</p>
+                    <p id="next-fertile-window" class="text-3xl font-bold main-gradient-text">--</p>
                 </section>
                 <section class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="grid grid-cols-2 gap-4 text-center">
@@ -234,8 +234,14 @@
             <!-- Settings Tab (Overhauled) -->
             <div id="settings-tab" class="tab-pane hidden">
                 <div class="space-y-6">
+                    <!-- Disclaimer at the top -->
+                    <div class="p-4 bg-red-100 text-red-800 rounded-lg shadow-sm text-sm border-l-4 border-red-500 text-center">
+                        <p class="font-semibold">Disclaimer:</p>
+                        <p>All predictions and information in this app are estimates based on the data you provide and should not be considered medical advice.</p>
+                    </div>
+
                     <section class="bg-white p-6 rounded-2xl shadow-lg">
-                        <h3 class="text-xl font-semibold text-center mb-6">Backup & Restore</h3>
+                        <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Backup & Restore</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <!-- Import Button -->
                             <div class="text-center">
@@ -263,7 +269,7 @@
                     </section>
                     
                     <section class="bg-white p-6 rounded-2xl shadow-lg">
-                        <h3 class="text-xl font-semibold text-center mb-6">Override Average Cycle Length (days)</h3>
+                        <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Override Average Cycle Length (days)</h3>
                         <div class="space-y-4">
                             <!-- Manual Cycle Length Override -->
                             <div class="mb-4">
@@ -601,7 +607,7 @@
                 if (window) {
                     var start = fromISODateString(window.start);
                     var end = fromISODateString(window.end);
-                    app.nextFertileWindow.innerHTML = `<span class="text-2xl">${start.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span> - <span class="text-2xl">${end.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span>`;
+                    app.nextFertileWindow.innerHTML = `<span class="text-3xl">${start.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span> - <span class="text-3xl">${end.toLocaleDateString('default', {month: 'short', day: 'numeric'})}</span>`;
                 } else {
                     app.nextFertileWindow.textContent = '--';
                 }
@@ -1016,8 +1022,8 @@
                 var a = document.createElement('a');
                 a.href = url;
                 a.download = 'pinkdays_backup_' + new Date().toISOString().split('T')[0] + '.json';
-                a.click();
                 URL.revokeObjectURL(url);
+                a.click();
             });
 
             app.importBtn.addEventListener('click', function() {
