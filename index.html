@@ -173,12 +173,12 @@
                     <section class="bg-white p-6 rounded-2xl shadow-lg">
                         <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
                         <div id="flow-analysis" class="text-center text-gray-600">
-                            </div>
+                        </div>
                     </section>
                     <section class="bg-white p-6 rounded-2xl shadow-lg">
                         <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
                         <ul id="period-history-list" class="space-y-3">
-                            </ul>
+                        </ul>
                     </section>
                 </div>
                 <div class="text-center mt-6">
@@ -1018,15 +1018,31 @@
                  showConfirm("Success", "Cycle length has been recalculated to " + avg + " days.", [{text: "OK"}]);
             });
 
+            // --- Export Functionality (FIXED for iOS Safari) ---
             app.exportBtn.addEventListener('click', function() {
+                // Get data and create a new Blob object
                 var dataStr = JSON.stringify(periodData, null, 2);
                 var blob = new Blob([dataStr], {type: "application/json"});
+                
+                // Create a temporary URL for the Blob
                 var url = URL.createObjectURL(blob);
+                
+                // Create a temporary anchor element
                 var a = document.createElement('a');
                 a.href = url;
                 a.download = 'pinkdays_backup_' + new Date().toISOString().split('T')[0] + '.json';
-                URL.revokeObjectURL(url);
+
+                // Append the anchor to the DOM and simulate a click to trigger the download
+                document.body.appendChild(a);
                 a.click();
+                
+                // This is the crucial fix for iOS Safari.
+                // The browser can prematurely garbage collect the Blob URL, causing the download to fail.
+                // We add a small delay before revoking the URL to give the browser's download process time to start.
+                setTimeout(function() {
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }, 500); // 500ms is a safe delay
             });
 
             app.importBtn.addEventListener('click', function() {
