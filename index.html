@@ -516,6 +516,7 @@
                         btn.classList.remove('active');
                     }
                 });
+                localStorage.setItem('pinkDaysLastTab', tabName); //Saves last tab so it can appear upon reload
             }
 
             // --- Stats ---
@@ -1096,7 +1097,8 @@
 
             // --- INITIALIZATION ---
             loadData();
-            switchTab('stats');
+            var lastTab = localStorage.getItem('pinkDaysLastTab') || 'stats'; // helps with reloading last saved tab
+            switchTab(lastTab); //switches to last saved tab
             updateAllUI();
         });
     </script>
