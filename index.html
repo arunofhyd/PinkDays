@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="iExbroKtO4ZRq3ZjUsyY8JJowXvx-yHOy4yQq0iS6vY" />
     <title>PinkDays - Period Tracker</title>
+    <!-- Link to Tailwind CSS and Font Awesome for icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Link to our custom stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="text-gray-800">
 
 <div class="main-container">
-    <!-- Login View -->
+    <!-- Login View (Initially shown) -->
     <div id="login-view" class="view-container w-full max-w-md mx-auto">
         <div class="bg-white rounded-xl border border-gray-200 shadow-2xl p-8 text-center">
-            <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-24 h-24 mx-auto mb-4">
+            <!-- Updated logo path with a fallback -->
+            <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-24 h-24 mx-auto mb-4" onerror="this.src='https://placehold.co/96x96/ff5c7c/fff?text=Logo'">
             <h1 class="text-5xl font-extrabold text-gray-800 tracking-tight mb-2">PinkDays</h1>
             <p class="text-gray-600 mb-8">A simple and private period tracker.</p>
-            
+
             <div class="space-y-4 text-left mb-2">
                 <input type="email" id="email-input" placeholder="Email" class="w-full px-4 py-2.5 text-base text-gray-800 bg-gray-50 border-2 border-gray-200 rounded-lg shadow-inner focus:ring-2 focus:ring-pink-500 focus:border-pink-500 focus:bg-white transition-all">
                 <div class="relative">
@@ -29,7 +31,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="text-right mb-4">
                 <button id="forgot-password-btn" class="text-sm text-pink-600 hover:underline focus:outline-none">Forgot Password?</button>
             </div>
@@ -45,7 +47,7 @@
             </div>
             <div class="space-y-4 mt-4">
                 <button id="google-signin-btn" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center text-lg font-semibold transition-colors">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" class="w-6 h-6 mr-3" alt="Google icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" class="w-6 h-6 mr-3" alt="Google icon" onerror="this.src='https://placehold.co/24x24/fff/000?text=G'">
                     Continue with Google
                 </button>
                 <button id="anon-continue-btn" class="w-full btn-secondary py-2 px-4 rounded-lg text-lg font-semibold">
@@ -59,49 +61,281 @@
     </div>
 
     <!-- App View (hidden by default) -->
-    <div id="app-view" class="view-container w-full max-w-4xl mx-auto hidden opacity-0 scale-95">
-        <div class="bg-white rounded-xl border border-gray-200 shadow-2xl p-6 md:p-8">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-12 h-12">
-                    <h1 class="text-4xl font-extrabold text-gray-800 tracking-tight">PinkDays</h1>
+    <div id="app-view" class="view-container w-full max-w-xl mx-auto hidden opacity-0 scale-95">
+        <header class="text-center my-6 flex justify-center items-center gap-3">
+            <!-- Updated logo path with a fallback -->
+            <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-12 h-12" onerror="this.src='https://placehold.co/48x48/ff5c7c/fff?text=Logo'">
+            <h1 class="text-4xl font-bold main-gradient-text">PinkDays</h1>
+        </header>
+
+        <nav class="flex justify-between items-center mb-6">
+            <div class="flex bg-gray-200 rounded-lg p-1">
+                <button data-tab="stats" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors active">Stats</button>
+                <button data-tab="calendar" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Calendar</button>
+                <button data-tab="settings" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Settings</button>
+            </div>
+            <button id="sign-out-btn" class="icon-btn" title="Sign Out">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            </button>
+        </nav>
+
+        <div id="tab-content">
+            <!-- Stats Tab -->
+            <div id="stats-tab" class="tab-pane space-y-6">
+                <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
+                    <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
+                    <p id="next-period-countdown" class="text-5xl font-bold">--</p>
+                    <p id="next-period-date" class="text-lg opacity-80 h-5 mt-2"></p>
+                </section>
+                <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-700">Fertile During</h3>
+                    <p id="next-fertile-window" class="text-3xl font-bold main-gradient-text">--</p>
+                </section>
+                <section class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <p class="text-gray-600">Avg. Cycle Length</p>
+                            <p id="avg-cycle-length" class="text-2xl font-bold main-gradient-text">--</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Avg. Period Length</p>
+                            <p id="avg-period-length" class="text-2xl font-bold main-gradient-text">--</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Expanded Analysis Section (Hidden by Default) -->
+                <div id="detailed-analysis" class="hidden space-y-6">
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
+                        <div id="flow-analysis" class="text-center text-gray-600">
+                        </div>
+                    </section>
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
+                        <ul id="period-history-list" class="space-y-3">
+                        </ul>
+                    </section>
                 </div>
-                <button id="sign-out-btn" class="icon-btn" title="Sign Out">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                </button>
+                <div class="text-center mt-6">
+                    <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full shadow-sm hover:opacity-90 transition-opacity">
+                        Detailed analysis <span id="analysis-arrow" class="text-2xl leading-none font-light">+</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="flex items-center justify-between w-full mb-4">
-                <button id="prev-month-btn" class="btn-primary rounded-full flex items-center justify-center w-12 h-12">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-                </button>
-                <h2 id="current-month-display" class="text-2xl font-bold text-gray-800 text-center mx-2"></h2>
-                <button id="next-month-btn" class="btn-primary rounded-full flex items-center justify-center w-12 h-12">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                </button>
+            <!-- Calendar Tab -->
+            <div id="calendar-tab" class="tab-pane hidden">
+                <main class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <h2 id="month-year" class="text-xl font-semibold main-gradient-text cursor-pointer hover:underline"></h2>
+                        <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-100">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-7 text-center font-medium text-gray-500 mb-2">
+                        <div class="sunday-text">Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid"></div>
+                    <div class="mt-4 pt-4 border-t flex justify-center items-center gap-4 text-xs text-gray-600">
+                        <div class="flex items-center">
+                            <span class="legend-dot bg-pink-300"></span>Period
+                        </div>
+                        <div class="flex items-center">
+                            <span class="legend-dot bg-cyan-200"></span>Fertile
+                        </div>
+                        <div class="flex items-center">
+                            <span class="legend-dot predicted-day border border-pink-200"></span>Predicted
+                        </div>
+                    </div>
+                    <div class="text-center mt-4 pt-4 border-t">
+                        <button id="log-period-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Log New Period</button>
+                    </div>
+                </main>
+                <!-- Disclaimer at the top -->
+                <div class="mt-6 p-4 bg-red-100 text-red-800 rounded-lg shadow-sm text-sm border-l-4 border-red-500 text-center">
+                    <p class="font-semibold">Disclaimer:</p>
+                    <p>All predictions and information in this app are estimates based on the data you provide and should not be considered medical advice.</p>
+                </div>
             </div>
 
-            <div id="calendar-grid" class="grid grid-cols-7 gap-1 md:gap-2">
-                <!-- Calendar will be rendered here by JavaScript -->
-            </div>
+            <!-- Settings Tab (Overhauled) -->
+            <div id="settings-tab" class="tab-pane hidden">
+                <div class="space-y-6">
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Backup & Restore</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Import Button -->
+                            <div class="text-center">
+                                <button id="import-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-xl shadow-md border-2 border-pink-500 hover:bg-pink-50 transition-colors">
+                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                    Import
+                                </button>
+                                <input type="file" id="upload-data-input" class="hidden" accept=".json">
+                            </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col md:flex-row gap-4">
-                <input type="file" id="upload-csv-input" accept=".csv" class="hidden">
-                <button id="upload-csv-btn" class="w-full md:w-1/2 px-5 py-3 btn-secondary rounded-lg flex items-center justify-center">
-                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg> Import Data
-                </button>
-                <button id="download-csv-btn" class="w-full md:w-1/2 px-5 py-3 btn-primary rounded-lg flex items-center justify-center">
-                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Export Data
-                </button>
+                            <!-- Export Button -->
+                            <div class="text-center">
+                                <button id="export-data-btn" class="w-full flex items-center justify-center gap-2 main-gradient-box text-white font-bold py-3 px-6 rounded-xl shadow-md hover:opacity-90 transition-opacity">
+                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Override Average Cycle Length (days)</h3>
+                        <div class="space-y-4">
+                            <!-- Manual Cycle Length Override -->
+                            <div class="mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" id="cycle-length-input-settings" class="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-200 focus:border-pink-300 transition-colors" placeholder="e.g. 28">
+                                    <button id="save-cycle-override-btn" class="px-6 py-3 main-gradient-box text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-opacity" aria-label="Save">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 6L9 17L4 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex justify-center">
+                                <button id="recalculate-btn-settings" class="text-sm text-pink-600 hover:underline">Auto-calculate from history</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Reset Data Section -->
+                    <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                        <div>
+                            <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
+                        </div>
+                    </section>
+
+                    <footer class="text-center pt-4 space-y-2">
+                        <p class="text-sm text-gray-500">
+                           Logged in as: <span id="user-email-display" class="font-medium">Offline User</span>
+                        </p>
+                        <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-pink-500 hover:text-pink-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            Reach out to the developer
+                        </a>
+                        <p class="text-gray-400 text-xs">Made with ❤️ by Arun Thomas</p>
+                    </footer>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="message-display" role="alert">
+<!-- All your original modals here -->
+<div id="welcome-modal" class="modal-backdrop hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
+        <!-- Updated logo path with a fallback -->
+        <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.src='https://placehold.co/64x64/ff5c7c/fff?text=Logo'">
+        <h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2>
+        <p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p>
+        <ul class="text-left space-y-3 mb-8">
+            <li class="flex items-center">
+                <span class="text-2xl mr-4">🗓️</span>
+                <span>Track your period & flow on the <b>Calendar</b>.</span>
+            </li>
+            <li class="flex items-center">
+                <span class="text-2xl mr-4">📈</span>
+                <span>View predictions & history in the <b>Stats</b> tab.</span>
+            </li>
+            <li class="flex items-center">
+                <span class="text-2xl mr-4">🔮</span>
+                <span>See your estimated <b>fertile window</b> automatically.</span>
+            </li>
+            <li class="flex items-center">
+                <span class="text-2xl mr-4">⚙️</span>
+                <span><b>Export</b> or <b>Import</b> your data in Settings.</span>
+            </li>
+        </ul>
+        <button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">
+            Let's Get Started!
+        </button>
+    </div>
+</div>
+
+<div id="log-period-modal" class="modal-backdrop hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md">
+        <h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" id="start-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
+            </div>
+            <div>
+                <label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input type="date" id="end-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
+            </div>
+        </div>
+        <h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3>
+        <div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
+            </div>
+        <div class="flex flex-col gap-2">
+            <button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">
+                Save
+            </button>
+            <button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs">
+        <div class="flex justify-between items-center mb-4">
+            <button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3>
+            <button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+        <div id="month-grid" class="grid grid-cols-4 gap-2">
+            </div>
+        <div class="flex justify-end mt-4">
+            <button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-modal" class="modal-backdrop hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center">
+        <h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2>
+        <p id="confirm-message" class="text-gray-600 mb-6"></p>
+        <div id="confirm-options-container" class="flex gap-4">
+            </div>
+    </div>
+</div>
+
+<div id="message-display" role="alert" class="hidden">
     <span id="message-text" class="block sm:inline font-medium"></span>
 </div>
 
+<!-- Link to the main JavaScript file -->
 <script type="module" src="main.js"></script>
 </body>
 </html>
