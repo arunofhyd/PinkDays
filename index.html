@@ -601,8 +601,8 @@
         });
     </script>
           
-    // Register the Service Worker for PWA offline functionality
     <script>
+            // Register the Service Worker for PWA offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
@@ -615,5 +615,6 @@
             });
         }
     </script>
+    
 </body>
 </html>
