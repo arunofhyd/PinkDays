@@ -21,6 +21,9 @@
 - 🔒 **Privacy-First Design**  
   Your data stays 100% on your device, stored securely in your browser. Nothing is ever uploaded or shared.
 
+- ☁️ **Cloud Syncing**
+  You can also sync your data across devices through cloud services login.
+  
 - 📥 **Data Control**  
   Backup and restore your data with one click—perfect for switching devices or peace of mind.
 
