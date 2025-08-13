@@ -701,6 +701,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { text: "Yes, Reset", action: async () => { periodData = { periods: [], cycleLength: 28 }; await saveData(); }, style: 'bg-red-600' }
     ]));
 
+    // Authentication Event Listeners
     const emailInput = document.getElementById('email-input');
     const passwordInput = document.getElementById('password-input');
     const passwordToggleBtn = document.getElementById('password-toggle-btn');
