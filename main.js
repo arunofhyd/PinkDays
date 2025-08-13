@@ -1,21 +1,158 @@
-import { auth, db, appId } from './firebase-config.js';
-import {
-    initAuth,
-    signUpWithEmail,
-    signInWithEmail,
-    resetPassword,
-    signInWithGoogle,
-    appSignOut
-} from './auth.js';
-import { doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// --- Global App State ---
-let currentDate = new Date();
-let pickerYear = new Date().getFullYear();
+// --- Firebase Global Variables (provided by Canvas) ---
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+    apiKey: "AIzaSyDEK9OgZ0PphoukTJb9uB1J_0de8Dtf0QA",
+    authDomain: "pinkdaysaoh.firebaseapp.com",
+    projectId: "pinkdaysaoh",
+    storageBucket: "pinkdaysaoh.appspot.com",
+    messagingSenderId: "16168022769",
+    appId: "1:16168022769:web:a7a4daf40c7bf11b56af50"
+};
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+// --- Firebase Initialization ---
+let app, auth, db;
+let userId;
+
+// This function now handles all Firebase initialization and auth state management
+async function initFirebase() {
+    if (Object.keys(firebaseConfig).length > 0) {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+                const offlineData = localStorage.getItem('pinkDaysData');
+                if (offlineData) {
+                    await migrateDataToFirestore(user.uid, JSON.parse(offlineData));
+                    localStorage.removeItem('pinkDaysData');
+                    showMessage("Local data merged with your account.", 'success');
+                }
+                showAppView();
+                updateAllUI();
+                startFirestoreSync();
+                document.getElementById('user-email-display').textContent = user.email || 'Anonymous';
+            } else {
+                const sessionMode = localStorage.getItem('sessionMode');
+                if (sessionMode === 'offline') {
+                    stopFirestoreSync();
+                    showAppView();
+                    updateAllUI();
+                } else {
+                    userId = null;
+                    showLoginView();
+                }
+            }
+        });
+
+        if (initialAuthToken) {
+            try {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } catch (error) {
+                console.error("Custom token sign-in failed:", error);
+                await signInAnonymously(auth);
+            }
+        } else {
+            await signInAnonymously(auth);
+        }
+    } else {
+        console.error("Firebase config is not available. Running in offline mode only.");
+        localStorage.setItem('sessionMode', 'offline');
+        showAppView();
+        updateAllUI();
+    }
+}
+
+// --- Data Management ---
 let periodData = { periods: [], cycleLength: 28 };
 let dataUnsubscribe = () => {};
 
-// --- UI Element References ---
+async function migrateDataToFirestore(uid, data) {
+    const userDocRef = doc(db, 'artifacts', appId, 'users', uid, 'data', 'pinkDaysData');
+    try {
+        await setDoc(userDocRef, data, { merge: true });
+    } catch (e) {
+        console.error("Error migrating data to Firestore:", e);
+    }
+}
+
+async function loadData() {
+    if (localStorage.getItem('sessionMode') === 'offline') {
+        const data = localStorage.getItem('pinkDaysData');
+        if (data) {
+            try {
+                const parsedData = JSON.parse(data);
+                if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') {
+                    periodData = parsedData;
+                    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
+                } else {
+                    throw new Error("Invalid data structure");
+                }
+            } catch (e) {
+                console.error("Failed to load or parse data from local storage, resetting to default.", e);
+                localStorage.removeItem('pinkDaysData');
+                showConfirm("Data Error", "Your saved data was corrupted and has been reset.", [{ text: "OK" }]);
+            }
+        } else {
+            app.welcomeModal.classList.remove('hidden');
+        }
+    }
+}
+
+function startFirestoreSync() {
+    if (!db || !auth.currentUser) {
+        console.log("Firestore or user ID not available. Cannot start sync.");
+        return;
+    }
+    const userId = auth.currentUser.uid;
+    const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'data', 'pinkDaysData');
+
+    dataUnsubscribe = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data && Array.isArray(data.periods) && typeof data.cycleLength === 'number') {
+                periodData = data;
+                periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
+                updateAllUI();
+            }
+        } else {
+            setDoc(userDocRef, periodData, { merge: true });
+        }
+    }, (error) => {
+        console.error("Error listening to Firestore changes:", error);
+        showMessage("Failed to sync data with the cloud. Check your connection.", 'error');
+    });
+}
+
+function stopFirestoreSync() {
+    if (dataUnsubscribe) {
+        dataUnsubscribe();
+    }
+}
+
+async function saveData() {
+    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
+    if (localStorage.getItem('sessionMode') === 'offline') {
+        localStorage.setItem('pinkDaysData', JSON.stringify(periodData));
+        updateAllUI();
+    } else if (db && auth.currentUser) {
+        try {
+            const userDocRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'data', 'pinkDaysData');
+            await setDoc(userDocRef, periodData, { merge: true });
+        } catch (error) {
+            console.error("An error occurred while saving data to Firestore:", error);
+            showConfirm("Save Error", "There was a problem saving your data. Please check your internet connection.", [{text: "OK"}]);
+        }
+    }
+}
+
+// --- Authentication and UI Functions ---
 const app = {
     loginView: document.getElementById('login-view'),
     appView: document.getElementById('app-view'),
@@ -66,20 +203,19 @@ const app = {
     confirmOptions: document.getElementById('confirm-options-container')
 };
 
-// --- Exported UI Functions for use in auth.js ---
-export function showLoginView() {
+function showLoginView() {
     app.appView.classList.add('hidden', 'opacity-0', 'scale-95');
     app.loginView.classList.remove('hidden');
     app.loginView.classList.add('opacity-100', 'scale-100');
 }
 
-export function showAppView() {
+function showAppView() {
     app.loginView.classList.add('hidden', 'opacity-0', 'scale-95');
     app.appView.classList.remove('hidden');
     app.appView.classList.add('opacity-100', 'scale-100');
 }
 
-export function showMessage(text, type = 'info') {
+function showMessage(text, type = 'info') {
     app.messageText.textContent = text;
     app.messageDisplay.className = `message-${type}`;
     app.messageDisplay.classList.remove('hidden');
@@ -88,7 +224,7 @@ export function showMessage(text, type = 'info') {
     }, 5000);
 }
 
-export function setButtonLoadingState(button, isLoading, originalText = 'Submit') {
+function setButtonLoadingState(button, isLoading, originalText = 'Submit') {
     if (isLoading) {
         button.classList.add('btn-loading');
         button.disabled = true;
@@ -100,88 +236,77 @@ export function setButtonLoadingState(button, isLoading, originalText = 'Submit'
     }
 }
 
-// --- Firestore Data Functions ---
-export async function migrateDataToFirestore(uid, data) {
-    const userDocRef = doc(db, 'artifacts', appId, 'users', uid, 'data', 'pinkDaysData');
+async function signUpWithEmail(email, password) {
+    const button = document.getElementById('email-signup-btn');
+    if (!email || password.length < 6) {
+        return showMessage("Email and a password of at least 6 characters are required.", 'error');
+    }
+    setButtonLoadingState(button, true, 'Sign Up');
     try {
-        await setDoc(userDocRef, data, { merge: true });
-    } catch (e) {
-        console.error("Error migrating data to Firestore:", e);
+        await createUserWithEmailAndPassword(auth, email, password);
+        localStorage.setItem('sessionMode', 'online');
+        showMessage("Sign up successful! Welcome to PinkDays.", 'success');
+    } catch (error) {
+        showMessage(`Sign-up failed: ${error.message}`, 'error');
+    } finally {
+        setButtonLoadingState(button, false, 'Sign Up');
     }
 }
 
-async function loadData() {
-    if (localStorage.getItem('sessionMode') === 'offline') {
-        const data = localStorage.getItem('pinkDaysData');
-        if (data) {
-            try {
-                const parsedData = JSON.parse(data);
-                if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') {
-                    periodData = parsedData;
-                    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-                } else {
-                    throw new Error("Invalid data structure");
-                }
-            } catch (e) {
-                console.error("Failed to load or parse data from local storage, resetting to default.", e);
-                localStorage.removeItem('pinkDaysData');
-                showConfirm("Data Error", "Your saved data was corrupted and has been reset.", [{ text: "OK" }]);
-            }
-        } else {
-            app.welcomeModal.classList.remove('hidden');
-        }
+async function signInWithEmail(email, password) {
+    const button = document.getElementById('email-signin-btn');
+    if (!email || !password) {
+        return showMessage("Email and password are required.", 'error');
+    }
+    setButtonLoadingState(button, true, 'Sign In');
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        localStorage.setItem('sessionMode', 'online');
+        showMessage("Sign in successful! Welcome back.", 'success');
+    } catch (error) {
+        showMessage(`Sign-in failed: ${error.message}`, 'error');
+    } finally {
+        setButtonLoadingState(button, false, 'Sign In');
     }
 }
 
-export function startFirestoreSync() {
-    if (!db || !auth.currentUser) {
-        console.log("Firestore or user ID not available. Cannot start sync.");
-        return;
+async function resetPassword(email) {
+    if (!email) {
+        return showMessage("Please enter your email address.", 'info');
     }
-    const userId = auth.currentUser.uid;
-    const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'data', 'pinkDaysData');
-
-    dataUnsubscribe = onSnapshot(userDocRef, (docSnap) => {
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data && Array.isArray(data.periods) && typeof data.cycleLength === 'number') {
-                periodData = data;
-                periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-                updateAllUI();
-            }
-        } else {
-            setDoc(userDocRef, periodData, { merge: true });
-        }
-    }, (error) => {
-        console.error("Error listening to Firestore changes:", error);
-        showMessage("Failed to sync data with the cloud. Check your connection.", 'error');
-    });
-}
-
-export function stopFirestoreSync() {
-    if (dataUnsubscribe) {
-        dataUnsubscribe();
+    try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage("Password reset email sent! Check your inbox.", 'success');
+    } catch (error) {
+        showMessage(`Error sending reset email: ${error.message}`, 'error');
     }
 }
 
-async function saveData() {
-    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-    if (localStorage.getItem('sessionMode') === 'offline') {
-        localStorage.setItem('pinkDaysData', JSON.stringify(periodData));
-        updateAllUI();
-    } else if (db && auth.currentUser) {
-        try {
-            const userDocRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'data', 'pinkDaysData');
-            await setDoc(userDocRef, periodData, { merge: true });
-        } catch (error) {
-            console.error("An error occurred while saving data to Firestore:", error);
-            showConfirm("Save Error", "There was a problem saving your data. Please check your internet connection.", [{text: "OK"}]);
-        }
+async function signInWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    try {
+        await signInWithPopup(auth, provider);
+        localStorage.setItem('sessionMode', 'online');
+        showMessage("Google sign-in successful!", 'success');
+    } catch (error) {
+        showMessage(`Google sign-in failed: ${error.message}`, 'error');
+    }
+}
+
+async function appSignOut() {
+    try {
+        await signOut(auth);
+        localStorage.removeItem('sessionMode');
+        showMessage("You have been signed out.", 'info');
+        stopFirestoreSync();
+        initFirebase();
+    } catch (error) {
+        showMessage(`Sign-out failed: ${error.message}`, 'error');
     }
 }
 
 // --- Core App UI Update and Logic ---
-export function updateAllUI() {
+function updateAllUI() {
     renderCalendar();
     updateStats();
 }
@@ -736,7 +861,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateAllUI();
     });
 
-    initAuth();
+    initFirebase();
     loadData();
     var lastTab = localStorage.getItem('pinkDaysLastTab') || 'stats';
     switchTab(lastTab);
