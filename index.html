@@ -6,13 +6,13 @@
     <meta name="google-site-verification" content="iExbroKtO4ZRq3ZjUsyY8JJowXvx-yHOy4yQq0iS6vY" />
     <title>PinkDays</title>
     
-    <link rel="manifest" href="manifest.json">
-
+   <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff5c7c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
+    
+    <link rel="apple-touch-icon" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_transparentlogo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_transparentlogo.png">
     <link rel="shortcut icon" href="pinkdays_logo.png">
@@ -599,6 +599,21 @@
             app.resetBtn.addEventListener('click', function() { showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [ { text: "Cancel", style: 'cancel' }, { text: "Yes, Reset", action: function() { if (isOfflineMode) localStorage.removeItem('pinkDaysData'); periodData = { periods: [], cycleLength: 28 }; saveData(); }, style: 'bg-red-600' } ]); });
 
         });
+    </script>
+          
+    // Register the Service Worker for PWA offline functionality
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
