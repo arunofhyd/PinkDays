@@ -6,12 +6,15 @@
     <meta name="google-site-verification" content="iExbroKtO4ZRq3ZjUsyY8JJowXvx-yHOy4yQq0iS6vY" />
     <title>PinkDays</title>
     
+    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
 
+    <!-- Apple-specific meta tags for Add to Homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
 
+    <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
@@ -19,6 +22,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
@@ -67,16 +71,27 @@
         .month-picker-btn:hover { background-color: #f3f4f6; }
         .month-picker-btn.active { background-color: #ff5c7c; color: white; }
         .auth-form-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+        
+        /* Transition classes */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <div id="auth-container" class="auth-form-container">
+    <!-- =========== AUTHENTICATION SCREEN =========== -->
+    <div id="auth-container" class="auth-form-container fade-in">
         <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
             <div class="text-center mb-8">
                 <img src="pinkdays_transparentlogo.png" alt="Logo" class="w-16 h-16 mx-auto mb-3" onerror="this.style.display='none'">
-                <h1 class="text-3xl font-bold text-gray-800">PinkDays</h1>
-                <p class="text-gray-500 mt-1">A simple and private period tracker.</p>
+                <h1 class="text-5xl font-bold main-gradient-text">PinkDays</h1>
+                <p class="text-gray-500 mt-2">A simple and private period tracker.</p>
             </div>
             
             <div class="space-y-4">
@@ -107,13 +122,14 @@
             </div>
 
             <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-                <svg class="w-5 h-5" viewBox="0 0 48 48" ><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C41.383,34.416,44,28.616,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google Icon" class="w-5 h-5">
                 Continue with Google
             </button>
 
-             <button id="offline-btn" class="w-full mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
+            <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
                 Continue Offline
-             </button>
+                <span class="block text-xs font-normal text-gray-500">(Saves data only on this device)</span>
+            </button>
 
              <div class="text-center mt-8">
                 <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-pink-500 transition-colors">
@@ -124,14 +140,15 @@
         </div>
     </div>
 
+    <!-- =========== MAIN APPLICATION =========== -->
     <div id="app-wrapper" class="hidden">
         <div id="app-container" class="max-w-xl mx-auto p-4">
-            <header class="text-center my-6 flex justify-between items-center gap-3">
+            <header class="relative text-center my-6 flex justify-center items-center">
                 <div class="flex items-center gap-3">
                     <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-12 h-12" onerror="this.style.display='none'">
                     <h1 class="text-4xl font-bold main-gradient-text">PinkDays</h1>
                 </div>
-                <div id="user-controls"></div>
+                <div id="user-controls" class="absolute right-0"></div>
             </header>
 
             <nav class="flex justify-center bg-gray-200 rounded-lg p-1 mb-6">
@@ -141,6 +158,7 @@
             </nav>
 
             <div id="tab-content">
+                <!-- Stats Tab -->
                 <div id="stats-tab" class="tab-pane space-y-6">
                     <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                         <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
@@ -183,6 +201,7 @@
                     </div>
                 </div>
 
+                <!-- Calendar Tab -->
                 <div id="calendar-tab" class="tab-pane hidden">
                     <main class="bg-white p-6 rounded-2xl shadow-lg">
                         <div class="flex items-center justify-between mb-4">
@@ -213,6 +232,7 @@
                     </div>
                 </div>
 
+                <!-- Settings Tab -->
                 <div id="settings-tab" class="tab-pane hidden">
                     <div class="space-y-6">
                         <section class="bg-white p-6 rounded-2xl shadow-lg">
@@ -255,7 +275,7 @@
                             </div>
                         </section>
 
-                        <footer class="text-center pt-4 space-y-2">
+                        <footer class="text-center pt-4 space-y-2 border-t mt-6">
                             <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-pink-500 hover:text-pink-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
                                 Reach out to the developer
@@ -267,12 +287,14 @@
             </div>
         </div>
         
+        <!-- MODALS -->
         <div id="welcome-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'"><h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2><p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p><ul class="text-left space-y-3 mb-8"><li class="flex items-center"><span class="text-2xl mr-4">🗓️</span><span>Track your period & flow on the <b>Calendar</b>.</span></li><li class="flex items-center"><span class="text-2xl mr-4">📈</span><span>View predictions & history in the <b>Stats</b> tab.</span></li><li class="flex items-center"><span class="text-2xl mr-4">🔮</span><span>See your estimated <b>fertile window</b> automatically.</span></li><li class="flex items-center"><span class="text-2xl mr-4">⚙️</span><span><b>Export</b> or <b>Import</b> your data in Settings.</span></li></ul><button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Let's Get Started!</button></div></div>
         <div id="log-period-modal" class="modal-backdrop hidden"><div class="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md"><h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2><div class="grid grid-cols-2 gap-4 mb-4"><div><label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label><input type="date" id="start-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div><div><label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label><input type="date" id="end-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div></div><h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3><div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div><div class="flex flex-col gap-2"><button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button><button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button></div></div></div>
         <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop"><div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs"><div class="flex justify-between items-center mb-4"><button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3><button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div id="month-grid" class="grid grid-cols-4 gap-2"></div><div class="flex justify-end mt-4"><button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button></div></div></div>
         <div id="confirm-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2><p id="confirm-message" class="text-gray-600 mb-6"></p><div id="confirm-options-container" class="flex gap-4"></div></div></div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -314,6 +336,27 @@
         const authErrorMessage = document.getElementById('auth-error-message');
         const forgotPasswordLink = document.getElementById('forgot-password-link');
 
+        // --- Transition Functions ---
+        function showAuthScreen() {
+            appWrapper.classList.add('fade-out');
+            setTimeout(() => {
+                appWrapper.classList.add('hidden');
+                authContainer.classList.remove('hidden');
+                authContainer.classList.remove('fade-out');
+                authContainer.classList.add('fade-in');
+            }, 500);
+        }
+
+        function showAppScreen() {
+            authContainer.classList.add('fade-out');
+            setTimeout(() => {
+                authContainer.classList.add('hidden');
+                appWrapper.classList.remove('hidden');
+                appWrapper.classList.remove('fade-out');
+                appWrapper.classList.add('fade-in');
+            }, 500);
+        }
+
         // --- App Logic (Moved inside this module) ---
         document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
@@ -341,18 +384,16 @@
             // --- AUTHENTICATION LOGIC ---
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    // User is signed in
                     currentUser = user;
                     isOfflineMode = false;
-                    authContainer.classList.add('hidden');
-                    appWrapper.classList.remove('hidden');
+                    showAppScreen();
                     await loadDataFromFirestore();
                     addLogoutButton();
                 } else {
-                    // User is signed out
                     currentUser = null;
-                    authContainer.classList.remove('hidden');
-                    appWrapper.classList.add('hidden');
+                    if (!isOfflineMode) {
+                        showAuthScreen();
+                    }
                     resetAppData();
                     userControlsContainer.innerHTML = '';
                 }
@@ -368,6 +409,18 @@
                     await signOut(auth);
                 });
             };
+            
+            const addOfflineExitButton = () => {
+                userControlsContainer.innerHTML = `
+                    <button id="exit-offline-btn" title="Exit Offline Mode" class="p-2 h-10 w-10 flex items-center justify-center text-pink-500 bg-pink-100 rounded-full hover:bg-pink-200 transition">
+                        <i class="fas fa-right-from-bracket"></i>
+                    </button>
+                `;
+                document.getElementById('exit-offline-btn').addEventListener('click', () => {
+                    isOfflineMode = false;
+                    showAuthScreen();
+                });
+            };
 
             const resetAppData = () => {
                 periodData = { periods: [], cycleLength: 28 };
@@ -376,20 +429,14 @@
             
             const setAuthMessage = (message, isError = true) => {
                 authErrorMessage.textContent = message;
-                if(isError) {
-                    authErrorMessage.classList.remove('text-green-500');
-                    authErrorMessage.classList.add('text-red-500');
-                } else {
-                    authErrorMessage.classList.remove('text-red-500');
-                    authErrorMessage.classList.add('text-green-500');
-                }
+                authErrorMessage.className = `text-sm mt-4 text-center h-4 ${isError ? 'text-red-500' : 'text-green-600'}`;
             };
 
             passwordToggle.addEventListener('click', () => {
                 const isPassword = passwordInput.type === 'password';
                 passwordInput.type = isPassword ? 'text' : 'password';
-                eyeOpenIcon.classList.toggle('hidden', !isPassword);
-                eyeClosedIcon.classList.toggle('hidden', isPassword);
+                eyeOpenIcon.classList.toggle('hidden');
+                eyeClosedIcon.classList.toggle('hidden');
             });
             
             signupBtn.addEventListener('click', async () => {
@@ -444,10 +491,9 @@
             offlineBtn.addEventListener('click', () => {
                 isOfflineMode = true;
                 currentUser = null;
-                authContainer.classList.add('hidden');
-                appWrapper.classList.remove('hidden');
+                showAppScreen();
                 loadDataFromLocalStorage();
-                userControlsContainer.innerHTML = '';
+                addOfflineExitButton();
             });
 
             // --- DATA MANAGEMENT ---
