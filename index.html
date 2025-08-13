@@ -6,20 +6,20 @@
     <meta name="google-site-verification" content="iExbroKtO4ZRq3ZjUsyY8JJowXvx-yHOy4yQq0iS6vY" />
     <title>PinkDays</title>
     
-   <link rel="manifest" href="manifest.json">
+    <!-- PWA and Mobile App Configuration -->
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff5c7c">
+
+    <!-- Apple-specific meta tags for Add to Homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PinkDays">
-    
     <link rel="apple-touch-icon" href="pinkdays_logo.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_transparentlogo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_transparentlogo.png">
-    <link rel="shortcut icon" href="pinkdays_logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         body {
@@ -69,24 +69,25 @@
         .auth-form-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
         
         /* Buttery Smooth Transition classes */
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
+        .screen-transition {
+            transition: opacity 0.5s ease-in-out;
         }
-        .fade-in {
-            opacity: 1;
-            transition: opacity 0.6s ease-in-out;
+        .is-transparent {
+            opacity: 0;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <div id="auth-container" class="auth-form-container fade-in">
+    <!-- =========== AUTHENTICATION SCREEN =========== -->
+    <div id="auth-container" class="auth-form-container screen-transition is-transparent hidden">
         <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
             <div class="text-center mb-8">
-                <div class="flex justify-center items-center gap-3 mb-2">
+                <div class="flex justify-center items-center gap-3 mb-4"> <!-- Increased bottom margin -->
                     <img src="pinkdays_transparentlogo.png" alt="Logo" class="w-16 h-16" onerror="this.style.display='none'">
-                    <h1 class="text-5xl font-bold main-gradient-text">PinkDays</h1>
+                    <div class="pb-2"> 
+                         <h1 class="text-5xl font-bold main-gradient-text">PinkDays</h1>
+                    </div>
                 </div>
                 <p class="text-gray-500">A simple and private period tracker.</p>
             </div>
@@ -137,7 +138,8 @@
         </div>
     </div>
 
-    <div id="app-wrapper" class="hidden">
+    <!-- =========== MAIN APPLICATION =========== -->
+    <div id="app-wrapper" class="hidden screen-transition">
         <div id="app-container" class="max-w-xl mx-auto p-4">
             <header class="relative text-center my-6 flex justify-center items-center">
                 <div class="flex items-center gap-3">
@@ -154,6 +156,7 @@
             </nav>
 
             <div id="tab-content">
+                <!-- Stats Tab -->
                 <div id="stats-tab" class="tab-pane space-y-6">
                     <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                         <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
@@ -196,6 +199,7 @@
                     </div>
                 </div>
 
+                <!-- Calendar Tab -->
                 <div id="calendar-tab" class="tab-pane hidden">
                     <main class="bg-white p-6 rounded-2xl shadow-lg">
                         <div class="flex items-center justify-between mb-4">
@@ -226,6 +230,7 @@
                     </div>
                 </div>
 
+                <!-- Settings Tab -->
                 <div id="settings-tab" class="tab-pane hidden">
                     <div class="space-y-6">
                         <section class="bg-white p-6 rounded-2xl shadow-lg">
@@ -279,12 +284,14 @@
             </div>
         </div>
         
+        <!-- MODALS -->
         <div id="welcome-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'"><h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2><p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p><ul class="text-left space-y-3 mb-8"><li class="flex items-center"><span class="text-2xl mr-4">🗓️</span><span>Track your period & flow on the <b>Calendar</b>.</span></li><li class="flex items-center"><span class="text-2xl mr-4">📈</span><span>View predictions & history in the <b>Stats</b> tab.</span></li><li class="flex items-center"><span class="text-2xl mr-4">🔮</span><span>See your estimated <b>fertile window</b> automatically.</span></li><li class="flex items-center"><span class="text-2xl mr-4">⚙️</span><span><b>Export</b> or <b>Import</b> your data in Settings.</span></li></ul><button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Let's Get Started!</button></div></div>
         <div id="log-period-modal" class="modal-backdrop hidden"><div class="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md"><h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2><div class="grid grid-cols-2 gap-4 mb-4"><div><label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label><input type="date" id="start-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div><div><label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label><input type="date" id="end-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div></div><h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3><div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div><div class="flex flex-col gap-2"><button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button><button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button></div></div></div>
         <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop"><div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs"><div class="flex justify-between items-center mb-4"><button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3><button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div id="month-grid" class="grid grid-cols-4 gap-2"></div><div class="flex justify-end mt-4"><button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button></div></div></div>
         <div id="confirm-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2><p id="confirm-message" class="text-gray-600 mb-6"></p><div id="confirm-options-container" class="flex gap-4"></div></div></div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -327,40 +334,37 @@
         const forgotPasswordLink = document.getElementById('forgot-password-link');
 
         // --- Transition Functions ---
-        const TRANSITION_DURATION = 600;
+        const TRANSITION_DURATION = 500; // Match CSS duration in milliseconds
         function showAuthScreen() {
-            appWrapper.classList.add('fade-out');
+            appWrapper.classList.add('is-transparent');
             setTimeout(() => {
                 appWrapper.classList.add('hidden');
                 authContainer.classList.remove('hidden');
-                authContainer.classList.remove('fade-out');
-                authContainer.classList.add('fade-in');
+                requestAnimationFrame(() => {
+                    authContainer.classList.remove('is-transparent');
+                });
             }, TRANSITION_DURATION);
         }
 
         function showAppScreen() {
-            authContainer.classList.add('fade-out');
+            authContainer.classList.add('is-transparent');
             setTimeout(() => {
                 authContainer.classList.add('hidden');
                 appWrapper.classList.remove('hidden');
-                appWrapper.classList.remove('fade-out');
-                appWrapper.classList.add('fade-in');
+                requestAnimationFrame(() => {
+                    appWrapper.classList.remove('is-transparent');
+                });
             }, TRANSITION_DURATION);
         }
 
-        // --- App Logic (Moved inside this module) ---
+        // --- App Logic ---
         document.addEventListener('DOMContentLoaded', function() {
             // --- DOM Elements ---
             var app = {
-                // Tabs
                 tabButtons: document.querySelectorAll('.tab-btn'), tabPanes: document.querySelectorAll('.tab-pane'),
-                // Stats
                 countdown: document.getElementById('next-period-countdown'), nextDate: document.getElementById('next-period-date'), nextFertileWindow: document.getElementById('next-fertile-window'), avgCycle: document.getElementById('avg-cycle-length'), avgPeriod: document.getElementById('avg-period-length'), flowAnalysis: document.getElementById('flow-analysis'), historyList: document.getElementById('period-history-list'), detailedAnalysis: document.getElementById('detailed-analysis'), showAnalysisBtn: document.getElementById('show-analysis-btn'), analysisArrow: document.getElementById('analysis-arrow'),
-                // Calendar
                 calendarGrid: document.getElementById('calendar-grid'), monthYear: document.getElementById('month-year'), prevBtn: document.getElementById('prev-month-btn'), nextBtn: document.getElementById('next-month-btn'), logPeriodBtn: document.getElementById('log-period-btn'),
-                // Settings
                 cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn: document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
-                // Modals
                 welcomeModal: document.getElementById('welcome-modal'), closeWelcomeBtn: document.getElementById('close-welcome-btn'), logModal: document.getElementById('log-period-modal'), startDateInput: document.getElementById('start-date-input'), endDateInput: document.getElementById('end-date-input'), dailyFlowContainer: document.getElementById('daily-flow-container'), saveLogBtn: document.getElementById('save-log-btn'), cancelLogBtn: document.getElementById('cancel-log-btn'), monthPickerModal: document.getElementById('month-picker-modal'), prevYearBtn: document.getElementById('prev-year-btn'), nextYearBtn: document.getElementById('next-year-btn'), pickerYearDisplay: document.getElementById('picker-year-display'), monthGrid: document.getElementById('month-grid'), closeMonthPickerBtn: document.getElementById('close-month-picker-btn'), confirmModal: document.getElementById('confirm-modal'), confirmTitle: document.getElementById('confirm-title'), confirmMessage: document.getElementById('confirm-message'), confirmOptions: document.getElementById('confirm-options-container')
             };
 
@@ -372,8 +376,22 @@
                 cycleLength: 28
             };
 
+            // --- INITIAL APP LOAD ---
+            function initializeApp() {
+                if (localStorage.getItem('pinkDaysOfflineMode') === 'true') {
+                    isOfflineMode = true;
+                    currentUser = null;
+                    appWrapper.classList.remove('hidden', 'is-transparent');
+                    authContainer.classList.add('hidden');
+                    loadDataFromLocalStorage();
+                    addOfflineExitButton();
+                } else {
+                    onAuthStateChanged(auth, handleAuthState);
+                }
+            }
+
             // --- AUTHENTICATION LOGIC ---
-            onAuthStateChanged(auth, async (user) => {
+            async function handleAuthState(user) {
                 if (user) {
                     currentUser = user;
                     isOfflineMode = false;
@@ -388,7 +406,7 @@
                     resetAppData();
                     userControlsContainer.innerHTML = '';
                 }
-            });
+            }
 
             const createExitButton = (id, title) => {
                 const button = document.createElement('button');
@@ -411,6 +429,7 @@
                 const exitBtn = createExitButton('exit-offline-btn', 'Exit Offline Mode');
                 exitBtn.addEventListener('click', () => {
                     isOfflineMode = false;
+                    localStorage.removeItem('pinkDaysOfflineMode');
                     showAuthScreen();
                 });
                 userControlsContainer.appendChild(exitBtn);
@@ -435,56 +454,41 @@
             
             signupBtn.addEventListener('click', async () => {
                 setAuthMessage('');
-                const email = emailInput.value;
-                const password = passwordInput.value;
-                if (!email || !password) return setAuthMessage("Please enter email and password.");
+                if (!emailInput.value || !passwordInput.value) return setAuthMessage("Please enter email and password.");
                 try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                } catch (error) {
-                    setAuthMessage(error.message);
-                }
+                    await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+                } catch (error) { setAuthMessage(error.message); }
             });
 
             signinBtn.addEventListener('click', async () => {
                 setAuthMessage('');
-                const email = emailInput.value;
-                const password = passwordInput.value;
-                if (!email || !password) return setAuthMessage("Please enter email and password.");
+                if (!emailInput.value || !passwordInput.value) return setAuthMessage("Please enter email and password.");
                 try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } catch (error) {
-                    setAuthMessage("Invalid email or password. Please try again.");
-                }
+                    await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+                } catch (error) { setAuthMessage("Invalid email or password. Please try again."); }
             });
             
             googleSigninBtn.addEventListener('click', async () => {
                 setAuthMessage('');
-                const provider = new GoogleAuthProvider();
                 try {
-                    await signInWithPopup(auth, provider);
-                } catch (error) {
-                    setAuthMessage(error.message);
-                }
+                    await signInWithPopup(auth, new GoogleAuthProvider());
+                } catch (error) { setAuthMessage(error.message); }
             });
 
             forgotPasswordLink.addEventListener('click', async (e) => {
                 e.preventDefault();
                 setAuthMessage('');
-                const email = emailInput.value;
-                if (!email) {
-                    return setAuthMessage('Please enter your email to reset password.');
-                }
+                if (!emailInput.value) return setAuthMessage('Please enter your email to reset password.');
                 try {
-                    await sendPasswordResetEmail(auth, email);
+                    await sendPasswordResetEmail(auth, emailInput.value);
                     setAuthMessage('Password reset email sent! Check your inbox.', false);
-                } catch (error) {
-                    setAuthMessage(error.message);
-                }
+                } catch (error) { setAuthMessage(error.message); }
             });
 
             offlineBtn.addEventListener('click', () => {
                 isOfflineMode = true;
                 currentUser = null;
+                localStorage.setItem('pinkDaysOfflineMode', 'true');
                 showAppScreen();
                 loadDataFromLocalStorage();
                 addOfflineExitButton();
@@ -494,15 +498,9 @@
             async function loadDataFromFirestore() {
                 const docRef = doc(db, 'users', currentUser.uid);
                 const docSnap = await getDoc(docRef);
-
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (Array.isArray(data.periods) && typeof data.cycleLength === 'number') {
-                        periodData = data;
-                        periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-                    } else {
-                        periodData = { periods: [], cycleLength: 28 };
-                    }
+                    periodData = (Array.isArray(data.periods) && typeof data.cycleLength === 'number') ? data : { periods: [], cycleLength: 28 };
                 } else {
                     periodData = { periods: [], cycleLength: 28 };
                     app.welcomeModal.classList.remove('hidden');
@@ -511,18 +509,16 @@
             }
 
             function loadDataFromLocalStorage() {
-                var data = localStorage.getItem('pinkDaysData');
+                const data = localStorage.getItem('pinkDaysData');
                 if (data) {
                     try {
-                        var parsedData = JSON.parse(data);
+                        const parsedData = JSON.parse(data);
                         if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') {
                             periodData = parsedData;
-                            periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
                         } else throw new Error("Invalid data structure");
                     } catch (e) {
-                        console.error("Failed to load or parse local data, resetting.", e);
                         localStorage.removeItem('pinkDaysData');
-                        showConfirm("Data Error", "Your saved data was corrupted and has been reset.", [{ text: "OK" }]);
+                        showConfirm("Data Error", "Your local data was corrupted and has been reset.", [{ text: "OK" }]);
                     }
                 } else {
                     app.welcomeModal.classList.remove('hidden');
@@ -531,28 +527,27 @@
             }
 
             async function saveData() {
+                periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
                 try {
-                    periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
                     if (isOfflineMode) {
                         localStorage.setItem('pinkDaysData', JSON.stringify(periodData));
                     } else if (currentUser) {
-                        const docRef = doc(db, 'users', currentUser.uid);
-                        await setDoc(docRef, periodData);
+                        await setDoc(doc(db, 'users', currentUser.uid), periodData);
                     }
                     updateAllUI();
                 } catch (error) {
-                    console.error("Error saving data:", error);
-                    showConfirm("Save Error", "Could not save your data. Please check your connection and try again.", [{ text: "OK" }]);
+                    showConfirm("Save Error", "Could not save your data. Please check your connection.", [{ text: "OK" }]);
                 }
             }
             
             function initializeAppUI() {
+                periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
                 const lastTab = localStorage.getItem('pinkDaysLastTab') || 'stats';
                 switchTab(lastTab);
                 updateAllUI();
             }
 
-            // --- ORIGINAL APP FUNCTIONS ---
+            // --- ALL OTHER APP FUNCTIONS (UNCHANGED) ---
             function toISODateString(date) { var pad = function(num) { return (num < 10 ? '0' : '') + num; }; return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
             function fromISODateString(str) { return new Date(str + 'T00:00:00'); }
             function updateAllUI() { renderCalendar(); updateStats(); }
@@ -598,11 +593,12 @@
             app.uploadInput.addEventListener('change', function(e) { var file = e.target.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function(event) { try { var uploadedData = JSON.parse(event.target.result); if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) { throw new Error("Invalid file format"); } var newPeriods = {}; periodData.periods.forEach(function(p) { newPeriods[p.date] = p; }); uploadedData.periods.forEach(function(p) { newPeriods[p.date] = p; }); periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function(key) { return newPeriods[key]; }); periodData.cycleLength = uploadedData.cycleLength; saveData(); showConfirm("Success", "Data has been merged.", [{text: "OK"}]); } catch (err) { showConfirm("Upload Error", "The selected file is not a valid PinkDays backup.", [{text: "OK"}]); } }; reader.readAsText(file); e.target.value = ''; });
             app.resetBtn.addEventListener('click', function() { showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [ { text: "Cancel", style: 'cancel' }, { text: "Yes, Reset", action: function() { if (isOfflineMode) localStorage.removeItem('pinkDaysData'); periodData = { periods: [], cycleLength: 28 }; saveData(); }, style: 'bg-red-600' } ]); });
 
+            // Initialize the app on load
+            initializeApp();
         });
     </script>
-          
     <script>
-            // Register the Service Worker for PWA offline functionality
+        // Register the Service Worker for PWA offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
@@ -615,6 +611,5 @@
             });
         }
     </script>
-    
 </body>
 </html>
