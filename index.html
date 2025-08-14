@@ -10,7 +10,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff5c7c">
 
-     <!-- Add to Homescreen & Favicon Icons -->
+    <!-- Add to Homescreen & Favicon Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
@@ -89,13 +89,13 @@
     <div id="auth-container" class="auth-form-container screen-transition is-transparent hidden">
         <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
             <div class="text-center mb-8">
-                <div class="flex justify-center items-center gap-3"> 
+                <div class="flex justify-center items-center gap-3">
                     <img src="pinkdays_transparentlogo.png" alt="Logo" class="w-16 h-16" onerror="this.style.display='none'">
                     <div class="pb-2"> 
                          <h1 class="text-5xl font-bold main-gradient-text">PinkDays</h1>
                     </div>
                 </div>
-                <p class="text-gray-500">A simple and private period tracker.</p>
+                <p class="text-gray-500 mt-2">A simple and private period tracker.</p>
             </div>
             
             <div class="space-y-4">
@@ -115,8 +115,14 @@
             <div id="auth-error-message" class="text-red-500 text-sm mt-4 text-center h-4"></div>
 
             <div class="flex items-center gap-2 mt-4">
-                <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition main-gradient-box">Sign In</button>
-                <button id="signup-btn" class="w-full py-3 text-gray-700 bg-gray-200 font-semibold rounded-lg hover:bg-gray-300 transition">Sign Up</button>
+                <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition main-gradient-box flex justify-center items-center h-12">
+                    <span class="button-text">Sign In</span>
+                    <i class="fas fa-spinner fa-spin hidden"></i>
+                </button>
+                <button id="signup-btn" class="w-full py-3 text-gray-700 bg-gray-200 font-semibold rounded-lg hover:bg-gray-300 transition flex justify-center items-center h-12">
+                    <span class="button-text">Sign Up</span>
+                    <i class="fas fa-spinner fa-spin hidden"></i>
+                </button>
             </div>
             
             <div class="flex items-center my-6">
@@ -125,9 +131,10 @@
                 <hr class="flex-grow border-t border-gray-300">
             </div>
 
-            <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google Icon" class="w-5 h-5">
-                Continue with Google
+            <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition h-12">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google Icon" class="w-5 h-5 button-icon">
+                <span class="button-text">Continue with Google</span>
+                <i class="fas fa-spinner fa-spin hidden"></i>
             </button>
 
             <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
@@ -397,10 +404,29 @@
             }
 
             // --- AUTHENTICATION LOGIC ---
+            function setButtonState(button, isLoading) {
+                const spinner = button.querySelector('.fa-spinner');
+                const text = button.querySelector('.button-text');
+                const icon = button.querySelector('.button-icon'); // Specifically for the Google icon
+
+                if (isLoading) {
+                    button.disabled = true;
+                    button.style.pointerEvents = 'none';
+                    if (text) text.classList.add('hidden');
+                    if (spinner) spinner.classList.remove('hidden');
+                } else {
+                    button.disabled = false;
+                    button.style.pointerEvents = 'auto';
+                    if (text) text.classList.remove('hidden');
+                    if (spinner) spinner.classList.add('hidden');
+                }
+            }
+
             async function handleAuthState(user) {
                 if (user) {
                     currentUser = user;
                     isOfflineMode = false;
+                    localStorage.removeItem('pinkDaysOfflineMode');
                     showAppScreen();
                     await loadDataFromFirestore();
                     addLogoutButton();
@@ -460,25 +486,44 @@
             
             signupBtn.addEventListener('click', async () => {
                 setAuthMessage('');
-                if (!emailInput.value || !passwordInput.value) return setAuthMessage("Please enter email and password.");
+                const email = emailInput.value;
+                const password = passwordInput.value;
+                if (!email || !password) return setAuthMessage("Please enter email and password.");
+                if (password.length < 6) return setAuthMessage("Password must be at least 6 characters.");
+
+                setButtonState(signupBtn, true);
                 try {
-                    await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-                } catch (error) { setAuthMessage(error.message); }
+                    await createUserWithEmailAndPassword(auth, email, password);
+                } catch (error) { 
+                    setAuthMessage(error.message);
+                    setButtonState(signupBtn, false);
+                }
             });
 
             signinBtn.addEventListener('click', async () => {
                 setAuthMessage('');
-                if (!emailInput.value || !passwordInput.value) return setAuthMessage("Please enter email and password.");
+                const email = emailInput.value;
+                const password = passwordInput.value;
+                if (!email || !password) return setAuthMessage("Please enter email and password.");
+
+                setButtonState(signinBtn, true);
                 try {
-                    await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-                } catch (error) { setAuthMessage("Invalid email or password. Please try again."); }
+                    await signInWithEmailAndPassword(auth, email, password);
+                } catch (error) { 
+                    setAuthMessage("Invalid email or password. Please try again.");
+                    setButtonState(signinBtn, false);
+                }
             });
             
             googleSigninBtn.addEventListener('click', async () => {
                 setAuthMessage('');
+                setButtonState(googleSigninBtn, true);
                 try {
                     await signInWithPopup(auth, new GoogleAuthProvider());
-                } catch (error) { setAuthMessage(error.message); }
+                } catch (error) { 
+                    setAuthMessage(error.message);
+                    setButtonState(googleSigninBtn, false);
+                }
             });
 
             forgotPasswordLink.addEventListener('click', async (e) => {
