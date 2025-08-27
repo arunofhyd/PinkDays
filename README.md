@@ -1,9 +1,9 @@
+<h2 align="center">PinkDays</h2>
+<p align="center">A beautiful, private, and lightweight period tracker that runs entirely on your device.</p>
+
 <p align="center">
   <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/>
 </p>
-
-<h2 align="center">PinkDays</h2>
-<p align="center">A beautiful, private, and lightweight period tracker that runs entirely on your device.</p>
 
 ---
 
