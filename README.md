@@ -2,10 +2,8 @@
 <p align="center">A beautiful, private, and lightweight period tracker that runs entirely on your device.</p>
 
 <p align="center">
-  <img src="pinkdays_transparentlogo.png" alt="PinkDays Logo" width="150"/>
+  <img width="300" height="300" alt="PinkDays Logo" src="pinkdays_transparentlogo.png"/>
 </p>
-
----
 
 ### ✨ Features
 
