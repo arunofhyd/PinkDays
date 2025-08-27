@@ -1,23 +1,23 @@
 {
   "name": "PinkDays - Period Tracker",
   "short_name": "PinkDays",
+  "description": "A simple, private, and offline-first period tracker.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff0f3",
   "theme_color": "#ff5c7c",
-  "description": "A simple, private, and offline-first period tracker.",
   "icons": [
     {
       "src": "pinkdays_logo.png",
       "sizes": "192x192",
       "type": "image/png"
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "pinkdays_logo.png",
       "sizes": "512x512",
       "type": "image/png"
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }
