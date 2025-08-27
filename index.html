@@ -6,14 +6,11 @@
     <meta name="google-site-verification" content="ZdFUK7Foqs86s5D0W3QRfwnT5olzIxqoAF0XRi_TZNU" />
     
     <title>PinkDays - Period Tracker</title>
-
     <meta name="description" content="PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.">
 
-    <!-- PWA and Mobile App Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff5c7c">
 
-   <!-- Updated Favicon Links -->
     <link rel="icon" href="assets/logo.png" type="image/png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
@@ -35,8 +32,7 @@
 
     <link href="assets/output.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         body {font-family: 'Inter', sans-serif;background-color: #f9fafb;}
@@ -56,7 +52,6 @@
         .sunday-text { color: #ef4444; }
         .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 50; transition: opacity 0.2s ease-in-out; }
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .tab-btn.active { background-color: transparent; color: white;}
         .hidden { display: none !important; }
         .month-picker-btn { width: 100%; padding: 0.75rem; border-radius: 0.5rem; font-weight: 500; transition: background-color 0.15s; }
         .month-picker-btn:hover { background-color: #f3f4f6; }
@@ -69,79 +64,78 @@
         nav.flex { position: relative;}
         nav.flex::before {content: '';position: absolute;z-index: 1;top: 4px;bottom: 4px;border-radius: 0.375rem; background-color: #ff5c7c; transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1);left: var(--indicator-left, 4px);width: var(--indicator-width, calc((100% - 8px) / 3));}
         .tab-btn { position: relative; z-index: 2; transition: color 0.4s ease-in-out;}
+        .tab-btn.active { background-color: transparent; color: white;}
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- =========== AUTHENTICATION SCREEN =========== -->
-<div id="auth-container" class="auth-form-container screen-transition is-transparent hidden">
-    <div class="w-full max-w-md">
-        <div class="bg-white p-8 rounded-2xl shadow-xl">
-            <div class="text-center mb-8">
-                <div class="flex justify-center items-baseline gap-2">
-                    <img src="assets/logo_t.webp" alt="Logo" class="w-12 h-12 relative top-1" onerror="this.style.display='none'">
-                    <div class="pb-2">
-                        <h1 class="text-5xl font-bold main-gradient-text pb-2">PinkDays</h1>
+    <div id="auth-container" class="auth-form-container screen-transition is-transparent hidden">
+        <div class="w-full max-w-md">
+            <div class="bg-white p-8 rounded-2xl shadow-xl">
+                <div class="text-center mb-8">
+                    <div class="flex justify-center items-baseline gap-2">
+                        <img src="assets/logo_t.webp" alt="Logo" class="w-12 h-12 relative top-1" onerror="this.style.display='none'">
+                        <div class="pb-2">
+                            <h1 class="text-5xl font-bold main-gradient-text pb-2">PinkDays</h1>
+                        </div>
+                    </div>
+                    <p class="text-gray-500">A simple and private period tracker.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <input id="email-input" type="email" placeholder="Email" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
+                    <div class="relative">
+                        <input id="password-input" type="password" placeholder="Password" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
+                        <button id="password-toggle" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i id="eye-open-icon" class="fas fa-eye"></i>
+                            <i id="eye-closed-icon" class="fas fa-eye-slash hidden"></i>
+                        </button>
+                    </div>
+                    <div class="flex justify-end items-center">
+                        <a id="forgot-password-link" href="#" class="text-sm text-pink-500 hover:underline">Forgot Password?</a>
                     </div>
                 </div>
-                <p class="text-gray-500">A simple and private period tracker.</p>
-            </div>
-            
-            <div class="space-y-4">
-                <input id="email-input" type="email" placeholder="Email" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
-                <div class="relative">
-                    <input id="password-input" type="password" placeholder="Password" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
-                    <button id="password-toggle" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-                        <i id="eye-open-icon" class="fas fa-eye"></i>
-                        <i id="eye-closed-icon" class="fas fa-eye-slash hidden"></i>
+
+                <div id="auth-error-message" class="text-red-500 text-sm mt-4 text-center h-4"></div>
+
+                <div class="flex items-center gap-2 mt-4">
+                    <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition main-gradient-box flex justify-center items-center h-12">
+                        <span class="button-text">Sign In</span>
+                        <i class="fas fa-spinner fa-spin hidden"></i>
+                    </button>
+                    <button id="signup-btn" class="w-full py-3 text-gray-700 bg-gray-200 font-semibold rounded-lg hover:bg-gray-300 transition flex justify-center items-center h-12">
+                        <span class="button-text">Sign Up</span>
+                        <i class="fas fa-spinner fa-spin hidden"></i>
                     </button>
                 </div>
-                <div class="flex justify-end items-center">
-                    <a id="forgot-password-link" href="#" class="text-sm text-pink-500 hover:underline">Forgot Password?</a>
+                
+                <div class="flex items-center my-6">
+                    <hr class="flex-grow border-t border-gray-300">
+                    <span class="px-3 text-gray-500 text-sm">OR</span>
+                    <hr class="flex-grow border-t border-gray-300">
+                </div>
+
+                <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition h-12">
+                    <img src="assets/google.webp" alt="Google Icon" class="w-5 h-5 button-icon">
+                    <span class="button-text">Continue with Google</span>
+                    <i class="fas fa-spinner fa-spin hidden"></i>
+                </button>
+
+                <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
+                    Continue as Guest
+                    <span class="block text-xs font-normal text-gray-500">(Saves data only on this device)</span>
+                </button>
+            </div>
+
+                <div class="text-center mt-8">
+                    <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-pink-500 transition-colors">
+                        <i class="fas fa-envelope"></i>
+                        Reach out to the developer
+                    </a>
                 </div>
             </div>
-
-            <div id="auth-error-message" class="text-red-500 text-sm mt-4 text-center h-4"></div>
-
-            <div class="flex items-center gap-2 mt-4">
-                <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition main-gradient-box flex justify-center items-center h-12">
-                    <span class="button-text">Sign In</span>
-                    <i class="fas fa-spinner fa-spin hidden"></i>
-                </button>
-                <button id="signup-btn" class="w-full py-3 text-gray-700 bg-gray-200 font-semibold rounded-lg hover:bg-gray-300 transition flex justify-center items-center h-12">
-                    <span class="button-text">Sign Up</span>
-                    <i class="fas fa-spinner fa-spin hidden"></i>
-                </button>
-            </div>
-            
-            <div class="flex items-center my-6">
-                <hr class="flex-grow border-t border-gray-300">
-                <span class="px-3 text-gray-500 text-sm">OR</span>
-                <hr class="flex-grow border-t border-gray-300">
-            </div>
-
-            <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition h-12">
-                <img src="assets/google.webp" alt="Google Icon" class="w-5 h-5 button-icon">
-                <span class="button-text">Continue with Google</span>
-                <i class="fas fa-spinner fa-spin hidden"></i>
-            </button>
-
-            <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
-                Continue as Guest
-                <span class="block text-xs font-normal text-gray-500">(Saves data only on this device)</span>
-            </button>
         </div>
 
-            <div class="text-center mt-8">
-                <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-pink-500 transition-colors">
-                    <i class="fas fa-envelope"></i>
-                    Reach out to the developer
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========== MAIN APPLICATION =========== -->
     <div id="app-wrapper" class="hidden screen-transition">
         <div id="app-container" class="max-w-xl mx-auto p-4">
             <header class="relative text-center my-6 flex justify-center items-center">
@@ -159,8 +153,8 @@
             </nav>
 
             <div id="tab-content">
-                <!-- Stats Tab -->
                 <div id="stats-tab" class="tab-pane space-y-6">
+    
                     <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
                         <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
                         <p id="next-period-countdown" class="text-5xl font-bold">--</p>
@@ -183,52 +177,27 @@
                         </div>
                     </section>
                     
-                    <div id="stats-tab" class="tab-pane space-y-6">
-    
-                        <section class="main-gradient-box text-white p-6 rounded-2xl shadow-lg text-center">
-                            <h3 class="text-lg font-semibold mb-2 opacity-90">Period In</h3>
-                            <p id="next-period-countdown" class="text-5xl font-bold">--</p>
-                            <p id="next-period-date" class="text-lg opacity-80 h-5 mt-2"></p>
-                        </section>
-                        <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
-                            <h3 class="text-lg font-semibold mb-2 text-gray-700">Fertile During</h3>
-                            <p id="next-fertile-window" class="text-3xl font-bold main-gradient-text">--</p>
-                        </section>
+                    <div id="detailed-analysis" class="space-y-6">
                         <section class="bg-white p-6 rounded-2xl shadow-lg">
-                            <div class="grid grid-cols-2 gap-4 text-center">
-                                <div>
-                                    <p class="text-gray-600">Avg. Cycle Length</p>
-                                    <p id="avg-cycle-length" class="text-2xl font-bold main-gradient-text">--</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600">Avg. Period Length</p>
-                                    <p id="avg-period-length" class="text-2xl font-bold main-gradient-text">--</p>
-                                </div>
+                            <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
+                            <div id="flow-analysis" class="text-center text-gray-600">
                             </div>
                         </section>
-                        
-                        <div id="detailed-analysis" class="space-y-6">
-                            <section class="bg-white p-6 rounded-2xl shadow-lg">
-                                <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
-                                <div id="flow-analysis" class="text-center text-gray-600">
-                                </div>
-                            </section>
-                            <section class="bg-white p-6 rounded-2xl shadow-lg">
-                                <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
-                                <ul id="period-history-list" class="space-y-3">
-                                </ul>
-                            </section>
-                        </div>
-                        
-                        <div class="text-center mt-6">
-                            <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full shadow-sm hover:opacity-90 transition-opacity">
-                                Detailed analysis <span id="analysis-arrow" class="text-2xl leading-none font-light">+</span>
-                            </button>
-                        </div>
-                    
+                        <section class="bg-white p-6 rounded-2xl shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
+                            <ul id="period-history-list" class="space-y-3">
+                            </ul>
+                        </section>
                     </div>
+                    
+                    <div class="text-center mt-6">
+                        <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full shadow-sm hover:opacity-90 transition-opacity">
+                            Detailed analysis <span id="analysis-arrow" class="text-2xl leading-none font-light">+</span>
+                        </button>
+                    </div>
+                
+                </div>
 
-                <!-- Calendar Tab -->
                 <div id="calendar-tab" class="tab-pane hidden">
                     <main class="bg-white p-6 rounded-2xl shadow-lg">
                         <div class="flex items-center justify-between mb-4">
@@ -259,7 +228,6 @@
                     </div>
                 </div>
 
-                <!-- Settings Tab -->
                 <div id="settings-tab" class="tab-pane hidden">
                     <div class="space-y-6">
                         <section class="bg-white p-6 rounded-2xl shadow-lg">
@@ -313,14 +281,12 @@
             </div>
         </div>
         
-        <!-- MODALS -->
         <div id="welcome-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><img src="assets/logo_t.webp" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'"><h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2><p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p><ul class="text-left space-y-3 mb-8"><li class="flex items-center"><span class="text-2xl mr-4">🗓️</span><span>Track your period & flow on the <b>Calendar</b>.</span></li><li class="flex items-center"><span class="text-2xl mr-4">📈</span><span>View predictions & history in the <b>Stats</b> tab.</span></li><li class="flex items-center"><span class="text-2xl mr-4">🔮</span><span>See your estimated <b>fertile window</b> automatically.</span></li><li class="flex items-center"><span class="text-2xl mr-4">⚙️</span><span><b>Export</b> or <b>Import</b> your data in Settings.</span></li></ul><button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Let's Get Started!</button></div></div>
         <div id="log-period-modal" class="modal-backdrop hidden"><div class="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md"><h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2><div class="grid grid-cols-2 gap-4 mb-4"><div><label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label><input type="date" id="start-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div><div><label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label><input type="date" id="end-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div></div><h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3><div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div><div class="flex flex-col gap-2"><button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button><button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button></div></div></div>
         <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop"><div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs"><div class="flex justify-between items-center mb-4"><button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3><button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div id="month-grid" class="grid grid-cols-4 gap-2"></div><div class="flex justify-end mt-4"><button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button></div></div></div>
         <div id="confirm-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2><p id="confirm-message" class="text-gray-600 mb-6"></p><div id="confirm-options-container" class="flex gap-4"></div></div></div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -410,7 +376,7 @@
             async function saveData() {periodData.periods.sort((a, b) => a.date.localeCompare(b.date));try {if (isOfflineMode) {localStorage.setItem('pinkDaysData', JSON.stringify(periodData));} else if (currentUser) {await setDoc(doc(db, 'users', currentUser.uid), periodData);}updateAllUI();} catch (error) {showConfirm("Save Error", "Could not save your data. Please check your connection.", [{ text: "OK" }]);}}
             function initializeAppUI() {periodData.periods.sort((a, b) => a.date.localeCompare(b.date));const lastTab = localStorage.getItem('pinkDaysLastTab') || 'stats';setTimeout(() => switchTab(lastTab), 0); updateAllUI();}
 
-            // --- ALL OTHER APP FUNCTIONS (UNCHANGED) ---
+            // --- APP FUNCTIONS ---
             function toISODateString(date) { var pad = function(num) { return (num < 10 ? '0' : '') + num; }; return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
             function fromISODateString(str) { return new Date(str + 'T00:00:00'); }
             function updateAllUI() { renderCalendar(); updateStats(); }
@@ -436,6 +402,7 @@
             function updateDailyFlowSelectors() { app.dailyFlowContainer.innerHTML = ''; var start = fromISODateString(app.startDateInput.value); var end = fromISODateString(app.endDateInput.value); if (!app.startDateInput.value || !app.endDateInput.value || start > end) return; var current = new Date(start); while(current <= end) { var dayStr = toISODateString(current); var existingLog = periodData.periods.find(function(p) { return p.date === dayStr; }); var flow = existingLog ? existingLog.flow : 'medium'; var dayEl = document.createElement('div'); dayEl.className = 'flex justify-between items-center bg-white p-2 rounded'; dayEl.innerHTML =  '<span class="text-sm font-medium">' + current.toLocaleDateString('default', {weekday: 'short', month: 'short', day: 'numeric'}) + '</span>' + '<div class="flex gap-1 items-center" data-date="' + dayStr + '">' + '<button data-flow="light" class="px-3 py-1 text-xs rounded ' + (flow === 'light' ? 'flow-light' : 'bg-gray-200') + '">Light</button>' + '<button data-flow="medium" class="px-3 py-1 text-xs rounded ' + (flow === 'medium' ? 'flow-medium' : 'bg-gray-200') + '">Medium</button>' + '<button data-flow="heavy" class="px-3 py-1 text-xs rounded ' + (flow === 'heavy' ? 'flow-heavy' : 'bg-gray-200') + '">Heavy</button>' + '<button data-action="delete" class="ml-2 text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path></svg></button>' + '</div>'; app.dailyFlowContainer.appendChild(dayEl); current.setDate(current.getDate() + 1); } }
             function showConfirm(title, message, options) { app.confirmTitle.textContent = title; app.confirmMessage.textContent = message; app.confirmOptions.innerHTML = ''; options.forEach(function(option) { var btn = document.createElement('button'); btn.textContent = option.text; var style = option.style || 'main-gradient-box'; if (style === 'cancel') { btn.className = 'w-full bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300'; } else if (style === 'bg-red-600') { btn.className = 'w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors'; } else { btn.className = 'w-full text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity ' + style; } btn.onclick = function() { if (option.action) option.action(); app.confirmModal.classList.add('hidden'); }; app.confirmOptions.appendChild(btn); }); app.confirmModal.classList.remove('hidden'); }
             
+            // --- EVENT LISTENERS ---
             app.tabButtons.forEach(function(btn) { btn.addEventListener('click', function() { switchTab(btn.dataset.tab); }); });
             app.prevBtn.addEventListener('click', function() { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
             app.nextBtn.addEventListener('click', function() { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
@@ -445,7 +412,7 @@
             app.closeMonthPickerBtn.addEventListener('click', function() { app.monthPickerModal.classList.add('hidden'); });
             app.logPeriodBtn.addEventListener('click', function() { var today = toISODateString(new Date()); showLogPeriodModal(today, today); });
             app.closeWelcomeBtn.addEventListener('click', function() { app.welcomeModal.classList.add('hidden'); });
-            app.showAnalysisBtn.addEventListener('click', function() { app.detailedAnalysis.classList.toggle('expanded'); if (app.detailedAnalysis.classList.contains('expanded')) {app.analysisArrow.textContent = '−';} else {app.analysisArrow.textContent = '+';} });            
+            app.showAnalysisBtn.addEventListener('click', function() { app.detailedAnalysis.classList.toggle('expanded'); if (app.detailedAnalysis.classList.contains('expanded')) {app.analysisArrow.textContent = '−';} else {app.analysisArrow.textContent = '+';} });        
             app.startDateInput.addEventListener('change', updateDailyFlowSelectors); app.endDateInput.addEventListener('change', updateDailyFlowSelectors);
             app.dailyFlowContainer.addEventListener('click', function(e) { if (e.target.tagName === 'BUTTON' || e.target.closest('button')) { var button = e.target.closest('button'); if (button.dataset.action === 'delete') { var row = button.closest('.flex[data-date]'); var dateToDelete = row.dataset.date; periodData.periods = periodData.periods.filter(p => p.date !== dateToDelete); row.remove(); } else if (button.dataset.flow) { var buttons = button.parentElement.querySelectorAll('button[data-flow]'); buttons.forEach(function(b) { b.classList.remove('flow-light', 'flow-medium', 'flow-heavy'); b.classList.add('bg-gray-200'); }); button.classList.remove('bg-gray-200'); button.classList.add('flow-' + button.dataset.flow); } } });
             app.saveLogBtn.addEventListener('click', function() { var start = app.startDateInput.value; var end = app.endDateInput.value; if (!start || !end || fromISODateString(start) > fromISODateString(end)) { showConfirm("Invalid Dates", "Please ensure the start date is not after the end date.", [{text: "OK"}]); return; } periodData.periods = periodData.periods.filter(function(p) { return p.date < start || p.date > end; }); var flowRows = app.dailyFlowContainer.querySelectorAll('[data-date]'); flowRows.forEach(function(row) { var date = row.dataset.date; var selectedBtn = row.querySelector('button[class*="flow-"]'); if(selectedBtn) { var flow = selectedBtn.dataset.flow; periodData.periods.push({date: date, flow: flow}); } }); saveData(); app.logModal.classList.add('hidden'); });
