@@ -60,7 +60,7 @@
         .screen-transition { transition: opacity 0.5s ease-in-out; }
         .is-transparent { opacity: 0; }
         #detailed-analysis { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out; }
-        #detailed-analysis.expanded { max-height: 1000px; opacity: 1;}
+        #detailed-analysis.expanded { max-height: 1000px; opacity: 1; padding-bottom: 1rem; }
         nav.flex { position: relative;}
         nav.flex::before {content: '';position: absolute;z-index: 1;top: 4px;bottom: 4px;border-radius: 0.375rem; background-color: #ff5c7c; transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1);left: var(--indicator-left, 4px);width: var(--indicator-width, calc((100% - 8px) / 3));}
         .tab-btn { position: relative; z-index: 2; transition: color 0.4s ease-in-out;}
