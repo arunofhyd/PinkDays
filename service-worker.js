@@ -1,80 +1,86 @@
-const CACHE_NAME = 'pinkdays-cache-v3'; // Increment version for updates
+const CACHE_NAME = 'pinkdays-cache-v1';
 
-// Core files that make up the "app shell"
+// List of files to cache on install.
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/logo.png',
-  '/assets/logo_t.webp',
-  '/assets/google.webp',
-  '/assets/output.css',
+  './',
+  'index.html',
+  'manifest.json',
+  'assets/logo.png', // This logo is no longer in the HTML, but including it just in case.
+  'assets/logo_t.png',
+  'assets/output.css',
+  'assets/google.webp',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
-  // You no longer need to cache the google fonts stylesheet here if you are preloading them in your HTML
-  // We will handle font caching dynamically below
 ];
 
-// Install the service worker and cache the app shell
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
+  console.log('Service Worker: Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache and caching app shell');
-        return cache.addAll(urlsToCache).catch(err => {
-          console.error('Failed to cache one or more URLs:', err);
-        });
+      .then((cache) => {
+        console.log('Service Worker: Caching assets');
+        return cache.addAll(urlsToCache);
+      })
+      .catch((error) => {
+        console.error('Service Worker: Caching failed', error);
       })
   );
 });
 
-// Activate event: clean up old caches
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker: Activating...');
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
-          .map(cacheName => caches.delete(cacheName))
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Service Worker: Deleting old cache', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
       );
     })
   );
 });
 
-// Fetch event: serve cached content and handle new requests
-self.addEventListener('fetch', event => {
-  const requestUrl = new URL(event.request.url);
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
 
-  // Cache-first strategy for app shell assets
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      // Return cached response if found
-      if (response) {
-        return response;
-      }
+  // Cache-First Strategy for core assets.
+  // This will check the cache first and fall back to the network.
+  const isCoreAsset = urlsToCache.some(url => request.url.includes(url.replace('./', '')));
+  const isFontAwesome = request.url.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome/');
+  const isFirebase = request.url.includes('www.gstatic.com/firebasejs/');
 
-      // If not in cache, fetch from the network
-      return fetch(event.request).then(networkResponse => {
-        // Check for valid response and cache it
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;
-        }
-
-        const cacheToOpen = (requestUrl.origin === 'https://fonts.gstatic.com') ? 'font-cache' : CACHE_NAME;
-        
-        // Clone the response to put in cache
-        const responseToCache = networkResponse.clone();
-
-        caches.open(cacheToOpen).then(cache => {
-          cache.put(event.request, responseToCache);
+  // Use cache-first for all static assets and the external Font Awesome library
+  if (isCoreAsset || isFontAwesome) {
+    event.respondWith(
+      caches.match(request).then((response) => {
+        // Return from cache or fetch from network
+        return response || fetch(request).then(fetchResponse => {
+          // Cache the new response for future use
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(request, fetchResponse.clone());
+            return fetchResponse;
+          });
         });
-
-        return networkResponse;
-
-      }).catch(() => {
-        // If fetch fails (e.g., offline), handle gracefully
-        // You can add a fallback here for specific routes if needed
-        // For example: return caches.match('/offline.html');
-        console.log('Network request failed and no cache found:', event.request.url);
-      });
-    })
-  );
+      })
+    );
+  } else if (isFirebase) {
+    // A network-only strategy is best for dynamic scripts like Firebase SDKs
+    // to ensure the latest version is always used.
+    event.respondWith(fetch(request));
+  } else {
+    // Network-First Strategy for all other requests.
+    // This ensures you always have the latest data if a connection is available.
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try to get a response from the cache.
+          return caches.match(request);
+        })
+    );
+  }
 });
