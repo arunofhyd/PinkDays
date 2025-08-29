@@ -92,43 +92,35 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- Core Functions ---
-   // MODIFIED AND FIXED FUNCTION
     function switchTab(tabName) {
         if (!app.nav) return;
     
-        // Use setTimeout to ensure this code runs after the browser has restored the cached state
+        // Use a 16ms timeout to ensure this code runs AFTER the browser has fully painted its cached state.
         setTimeout(() => {
-            // Show the correct content pane
-            app.tabPanes.forEach(pane => {
-                pane.classList.add('hidden');
-            });
+            // --- STEP 1: Forcefully deactivate and hide EVERYTHING first ---
+            app.tabButtons.forEach(btn => btn.classList.remove('active'));
+            app.tabPanes.forEach(pane => pane.classList.add('hidden'));
+    
+            // --- STEP 2: Now, activate ONLY the correct tab and pane ---
+            const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
             const paneToShow = document.getElementById(tabName + '-tab');
+    
+            if (activeTabButton) {
+                activeTabButton.classList.add('active');
+            }
             if (paneToShow) {
                 paneToShow.classList.remove('hidden');
             }
     
-            // Set the correct active button
-            const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-            app.tabButtons.forEach(btn => {
-                // Forcefully add or remove the active class for clarity
-                if (btn === activeTabButton) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-    
-            // Position the pink pill
+            // --- STEP 3: Position the indicator pill ---
             if (app.nav && activeTabButton) {
                 const clientWidth = activeTabButton.clientWidth;
-                // The setTimeout makes the fallback for clientWidth === 0 unnecessary
                 const offsetLeft = activeTabButton.offsetLeft;
                 app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
                 app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
             }
-        }, 0); // A delay of 0 ms pushes this to the end of the execution queue
+        }, 16); // Using a 16ms delay is the critical change.
     }
-    
     // --- INITIAL APP LOAD ---
     function initializeApp() {
         if (localStorage.getItem('pinkDaysOfflineMode') === 'true') {
