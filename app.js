@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- DOM Elements ---
     var app = {
         nav: document.querySelector('nav.flex'),
-        tabButtons: document.querySelectorAll('.tab-btn'), tabPanes: document.querySelectorAll('.tab-pane'),
+        tabButtons: document.querySelectorAll('.tab-btn'),
+        tabPanes: document.querySelectorAll('.tab-pane'),
         countdown: document.getElementById('next-period-countdown'), nextDate: document.getElementById('next-period-date'), nextFertileWindow: document.getElementById('next-fertile-window'), avgCycle: document.getElementById('avg-cycle-length'), avgPeriod: document.getElementById('avg-period-length'), flowAnalysis: document.getElementById('flow-analysis'), historyList: document.getElementById('period-history-list'), detailedAnalysis: document.getElementById('detailed-analysis'), showAnalysisBtn: document.getElementById('show-analysis-btn'), analysisArrow: document.getElementById('analysis-arrow'),
         calendarGrid: document.getElementById('calendar-grid'), monthYear: document.getElementById('month-year'), prevBtn: document.getElementById('prev-month-btn'), nextBtn: document.getElementById('next-month-btn'), logPeriodBtn: document.getElementById('log-period-btn'),
         cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn: document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
@@ -89,6 +90,36 @@ document.addEventListener('DOMContentLoaded', function () {
         periods: [],
         cycleLength: 28
     };
+
+    // --- Core Functions ---
+    function switchTab(tabName) {
+        if (!app.nav) return;
+        // Show the correct content pane
+        app.tabPanes.forEach(pane => pane.classList.add('hidden'));
+        const paneToShow = document.getElementById(tabName + '-tab');
+        if (paneToShow) paneToShow.classList.remove('hidden');
+
+        // Set the correct active button
+        const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+        app.tabButtons.forEach(btn => btn.classList.toggle('active', btn === activeTabButton));
+
+        // Position the pink pill
+        if (app.nav && activeTabButton) {
+            const clientWidth = activeTabButton.clientWidth;
+            if (clientWidth === 0) {
+                // Fallback for extreme race conditions
+                requestAnimationFrame(() => switchTab(tabName));
+                return;
+            }
+            const offsetLeft = activeTabButton.offsetLeft;
+            app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
+            app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
+        }
+    }
+
+    function resetToDefaultState() {
+        switchTab('stats');
+    }
 
     // --- INITIAL APP LOAD ---
     function initializeApp() {
@@ -114,9 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addLogoutButton();
         } else {
             currentUser = null;
-            if (!isOfflineMode) {
-                showAuthScreen();
-            }
+            if (!isOfflineMode) { showAuthScreen(); }
             resetAppData();
             userControlsContainer.innerHTML = '';
         }
@@ -158,9 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data) {
             try {
                 const parsedData = JSON.parse(data);
-                if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') {
-                    periodData = parsedData;
-                } else throw new Error("Invalid data structure");
+                if (Array.isArray(parsedData.periods) && typeof parsedData.cycleLength === 'number') { periodData = parsedData; }
+                else throw new Error("Invalid data structure");
             } catch (e) {
                 localStorage.removeItem('pinkDaysData');
                 showConfirm("Data Error", "Your local data was corrupted and has been reset.", [{ text: "OK" }]);
@@ -173,11 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
     async function saveData() {
         periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
         try {
-            if (isOfflineMode) {
-                localStorage.setItem('pinkDaysData', JSON.stringify(periodData));
-            } else if (currentUser) {
-                await setDoc(doc(db, 'users', currentUser.uid), periodData);
-            }
+            if (isOfflineMode) { localStorage.setItem('pinkDaysData', JSON.stringify(periodData)); }
+            else if (currentUser) { await setDoc(doc(db, 'users', currentUser.uid), periodData); }
             updateAllUI();
         } catch (error) {
             showConfirm("Save Error", "Could not save your data. Please check your connection.", [{ text: "OK" }]);
@@ -185,41 +210,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function initializeAppUI() {
         periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-        // **FIX**: Always set the pill to the default 'stats' tab position on load.
-        switchTab('stats');
+        resetToDefaultState();
         updateAllUI();
         loadingOverlay.classList.add('hidden');
     }
 
-    // --- ALL OTHER APP FUNCTIONS (UNCHANGED) ---
+    // --- ALL OTHER APP FUNCTIONS ---
     function toISODateString(date) { var pad = function (num) { return (num < 10 ? '0' : '') + num; }; return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
     function fromISODateString(str) { return new Date(str + 'T00:00:00'); }
     function updateAllUI() { renderCalendar(); updateStats(); }
-    function switchTab(tabName) {
-        if (!app.nav) return;
-        app.tabPanes.forEach(function (pane) { pane.classList.add('hidden'); });
-        const paneToShow = document.getElementById(tabName + '-tab');
-        if (paneToShow) paneToShow.classList.remove('hidden');
-
-        const activeTab = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-        app.tabButtons.forEach(function (btn) {
-            btn.classList.toggle('active', btn === activeTab);
-        });
-
-        if (app.nav && activeTab) {
-            const clientWidth = activeTab.clientWidth;
-            if (clientWidth === 0) {
-                // If width is 0, try again in a moment. This is a fallback for strange rendering issues.
-                setTimeout(() => switchTab(tabName), 50);
-                return;
-            }
-            const offsetLeft = activeTab.offsetLeft;
-            app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
-            app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
-        }
-        // **FIX**: Do NOT save the last tab anymore.
-        // localStorage.setItem('pinkDaysLastTab', tabName);
-    }
     function updateStats() { var startDates = getPeriodStartDates(); var calculatedAvgCycle = calculateAverageCycleLength(startDates); var effectiveCycleLength = periodData.cycleLength || calculatedAvgCycle; var avgPeriod = calculateAveragePeriodLength(); app.avgCycle.textContent = effectiveCycleLength + ' days'; app.avgPeriod.textContent = avgPeriod.toFixed(1) + ' days'; app.cycleOverrideInput.value = effectiveCycleLength; var nextDate = getNextPredictedStartDate(startDates, effectiveCycleLength); if (nextDate) { var today = new Date(); today.setHours(0, 0, 0, 0); var diffTime = nextDate - today; var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); if (diffDays === 0) app.countdown.textContent = "Today"; else if (diffDays < 0) app.countdown.textContent = "Overdue"; else app.countdown.textContent = diffDays + ' day' + (diffDays !== 1 ? 's' : ''); app.nextDate.textContent = '(' + nextDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) + ')'; } else { app.countdown.textContent = '--'; app.nextDate.textContent = 'Log a period to see predictions'; } renderHistory(startDates); renderFlowAnalysis(); renderNextFertileWindow(); }
     function renderHistory(startDates) { app.historyList.innerHTML = ''; if (startDates.length === 0) { app.historyList.innerHTML = '<li class="text-center text-gray-500">No periods logged yet.</li>'; return; } var periodBlocks = getPeriodBlocks(startDates); periodBlocks.reverse().slice(0, 5).forEach(function (block) { var startDate = fromISODateString(block.start); var endDate = fromISODateString(block.end); var li = document.createElement('li'); li.className = 'flex items-center space-x-2 bg-gray-50 p-3 rounded-lg'; li.innerHTML = '<div>' + '<p class="font-semibold">' + startDate.toLocaleDateString('default', { month: 'long', day: 'numeric' }) + ' - ' + endDate.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' }) + '</p>' + '<p class="text-sm text-gray-500">' + block.length + ' days' + (block.cycleLength ? ' (' + block.cycleLength + '-day cycle)' : '') + '</p>' + '</div>'; app.historyList.appendChild(li); }); }
     function renderFlowAnalysis() { var flowDist = calculateFlowDistribution(); if (flowDist.totalDays === 0) { app.flowAnalysis.innerHTML = '<p class="text-center text-gray-500">Log periods to see flow analysis.</p>'; return; } app.flowAnalysis.innerHTML = `<div class="space-y-3"> <div class="flex items-center text-sm text-gray-600"> <span class="font-semibold flex-grow-0 w-20">Light:</span> <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2"> <div class="h-full bg-pink-300" style="width: ${(flowDist.light / flowDist.totalDays) * 100}%;"></div> </div> <span class="w-16 text-right flex-grow-0">${flowDist.light.toFixed(1)} days</span> </div> <div class="flex items-center text-sm text-gray-600"> <span class="font-semibold flex-grow-0 w-20">Medium:</span> <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2"> <div class="h-full bg-pink-400" style="width: ${(flowDist.medium / flowDist.totalDays) * 100}%;"></div> </div> <span class="w-16 text-right flex-grow-0">${flowDist.medium.toFixed(1)} days</span> </div> <div class="flex items-center text-sm text-gray-600"> <span class="font-semibold flex-grow-0 w-20">Heavy:</span> <div class="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden mx-2"> <div class="h-full bg-pink-500" style="width: ${(flowDist.heavy / flowDist.totalDays) * 100}%;"></div> </div> <span class="w-16 text-right flex-grow-0">${flowDist.heavy.toFixed(1)} days</span> </div> </div>`; }
@@ -241,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateDailyFlowSelectors() { app.dailyFlowContainer.innerHTML = ''; var start = fromISODateString(app.startDateInput.value); var end = fromISODateString(app.endDateInput.value); if (!app.startDateInput.value || !app.endDateInput.value || start > end) return; var current = new Date(start); while (current <= end) { var dayStr = toISODateString(current); var existingLog = periodData.periods.find(function (p) { return p.date === dayStr; }); var flow = existingLog ? existingLog.flow : 'medium'; var dayEl = document.createElement('div'); dayEl.className = 'flex justify-between items-center bg-white p-2 rounded'; dayEl.innerHTML = '<span class="text-sm font-medium">' + current.toLocaleDateString('default', { weekday: 'short', month: 'short', day: 'numeric' }) + '</span>' + '<div class="flex gap-1 items-center" data-date="' + dayStr + '">' + '<button data-flow="light" class="px-3 py-1 text-xs rounded ' + (flow === 'light' ? 'flow-light' : 'bg-gray-200') + '">Light</button>' + '<button data-flow="medium" class="px-3 py-1 text-xs rounded ' + (flow === 'medium' ? 'flow-medium' : 'bg-gray-200') + '">Medium</button>' + '<button data-flow="heavy" class="px-3 py-1 text-xs rounded ' + (flow === 'heavy' ? 'flow-heavy' : 'bg-gray-200') + '">Heavy</button>' + '<button data-action="delete" class="ml-2 text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path></svg></button>' + '</div>'; app.dailyFlowContainer.appendChild(dayEl); current.setDate(current.getDate() + 1); } }
     function showConfirm(title, message, options) { app.confirmTitle.textContent = title; app.confirmMessage.textContent = message; app.confirmOptions.innerHTML = ''; options.forEach(function (option) { var btn = document.createElement('button'); btn.textContent = option.text; var style = option.style || 'main-gradient-box'; if (style === 'cancel') { btn.className = 'w-full bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300'; } else if (style === 'bg-red-600') { btn.className = 'w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition-colors'; } else { btn.className = 'w-full text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity ' + style; } btn.onclick = function () { if (option.action) option.action(); app.confirmModal.classList.add('hidden'); }; app.confirmOptions.appendChild(btn); }); app.confirmModal.classList.remove('hidden'); }
 
+    // Event Listeners
     app.tabButtons.forEach(function (btn) { btn.addEventListener('click', function () { switchTab(btn.dataset.tab); }); });
     app.prevBtn.addEventListener('click', function () { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
     app.nextBtn.addEventListener('click', function () { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
@@ -262,6 +262,16 @@ document.addEventListener('DOMContentLoaded', function () {
     app.uploadInput.addEventListener('change', function (e) { var file = e.target.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function (event) { try { var uploadedData = JSON.parse(event.target.result); if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) { throw new Error("Invalid file format"); } var newPeriods = {}; periodData.periods.forEach(function (p) { newPeriods[p.date] = p; }); uploadedData.periods.forEach(function (p) { newPeriods[p.date] = p; }); periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function (key) { return newPeriods[key]; }); periodData.cycleLength = uploadedData.cycleLength; saveData(); showConfirm("Success", "Data has been merged.", [{ text: "OK" }]); } catch (err) { showConfirm("Upload Error", "The selected file is not a valid PinkDays backup.", [{ text: "OK" }]); } }; reader.readAsText(file); e.target.value = ''; });
     app.resetBtn.addEventListener('click', function () { showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [{ text: "Cancel", style: 'cancel' }, { text: "Yes, Reset", action: function () { if (isOfflineMode) localStorage.removeItem('pinkDaysData'); periodData = { periods: [], cycleLength: 28 }; saveData(); }, style: 'bg-red-600' }]); });
 
+    // Handles browser session restore (bfcache)
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            // Page was restored from cache, which can cause an inconsistent UI state.
+            // Reset to the default state to ensure everything is correct.
+            console.log('Page restored from bfcache. Resetting to default state.');
+            resetToDefaultState();
+        }
+    });
+    
     // Initialize the app on load
     initializeApp();
 });
