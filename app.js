@@ -92,31 +92,43 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- Core Functions ---
+   // MODIFIED AND FIXED FUNCTION
     function switchTab(tabName) {
         if (!app.nav) return;
-        // Show the correct content pane
-        app.tabPanes.forEach(pane => pane.classList.add('hidden'));
-        const paneToShow = document.getElementById(tabName + '-tab');
-        if (paneToShow) paneToShow.classList.remove('hidden');
-
-        // Set the correct active button
-        const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-        app.tabButtons.forEach(btn => btn.classList.toggle('active', btn === activeTabButton));
-
-        // Position the pink pill
-        if (app.nav && activeTabButton) {
-            const clientWidth = activeTabButton.clientWidth;
-            if (clientWidth === 0) {
-                // Fallback for extreme race conditions
-                requestAnimationFrame(() => switchTab(tabName));
-                return;
+    
+        // Use setTimeout to ensure this code runs after the browser has restored the cached state
+        setTimeout(() => {
+            // Show the correct content pane
+            app.tabPanes.forEach(pane => {
+                pane.classList.add('hidden');
+            });
+            const paneToShow = document.getElementById(tabName + '-tab');
+            if (paneToShow) {
+                paneToShow.classList.remove('hidden');
             }
-            const offsetLeft = activeTabButton.offsetLeft;
-            app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
-            app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
-        }
+    
+            // Set the correct active button
+            const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            app.tabButtons.forEach(btn => {
+                // Forcefully add or remove the active class for clarity
+                if (btn === activeTabButton) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+    
+            // Position the pink pill
+            if (app.nav && activeTabButton) {
+                const clientWidth = activeTabButton.clientWidth;
+                // The setTimeout makes the fallback for clientWidth === 0 unnecessary
+                const offsetLeft = activeTabButton.offsetLeft;
+                app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
+                app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
+            }
+        }, 0); // A delay of 0 ms pushes this to the end of the execution queue
     }
-
+    
     // --- INITIAL APP LOAD ---
     function initializeApp() {
         if (localStorage.getItem('pinkDaysOfflineMode') === 'true') {
