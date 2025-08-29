@@ -3,57 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="ZdFUK7Foqs86s5D0W3QRfwnT5olzIxqoAF0XRi_TZNU" />
-    <title>PinkDays</title>
+    <meta name="google-site-verification" content="iExbroKtO4ZRq3ZjUsyY8JJowXvx-yHOy4yQq0iS6vY" />
     
+    <title>PinkDays - Period Tracker</title>
+
+    <meta name="description" content="PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.">
+
     <!-- PWA and Mobile App Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff5c7c">
-    <!-- Add to Homescreen & Favicon Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="pinkdays_logo.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="pinkdays_logo.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="pinkdays_logo.png">
-    <link rel="shortcut icon" href="pinkdays_logo.png">
-    <!-- Apple-specific meta tags for Add to Homescreen -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PinkDays">
-    <link rel="apple-touch-icon" href="pinkdays_logo.png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome CDN -->
+   <!-- Updated Favicon Links -->
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
+    <link rel="shortcut icon" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/logo.png">
+
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="PinkDays">
+    <meta name="application-name" content="PinkDays">    
+    <meta name="msapplication-TileImage" content="assets/logo.png">
+    <meta name="msapplication-TileColor" content="#ff5c7c">
+    <meta name="theme-color" content="#ff5c7c">
+
+    <link href="assets/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
-        }
-        .main-gradient-text {
-            background: -webkit-linear-gradient(45deg, #ff5c7c,#ff8ca6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .main-gradient-bg {
-            background: linear-gradient(to right, #ff8ca6, #ff5c7c);
-        }
-        .main-gradient-box {
-            background: linear-gradient(to right, #ff5c7c, #fa4366);
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-        .day {
-            transition: all 0.2s ease-in-out;
-            aspect-ratio: 1 / 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
+        body {font-family: 'Inter', sans-serif;background-color: #f9fafb;}
+        .main-gradient-text { background: -webkit-linear-gradient(45deg, #ff5c7c,#ff8ca6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .main-gradient-bg {background: linear-gradient(to right, #ff8ca6, #ff5c7c);}
+        .main-gradient-box {background: linear-gradient(to right, #ff5c7c, #fa4366);}
+        .calendar-grid {display: grid;grid-template-columns: repeat(7, 1fr);gap: 4px;}
+        .day {transition: all 0.2s ease-in-out;aspect-ratio: 1 / 1;display: flex;align-items: center;justify-content: center;border-radius: 50%;}
         .flow-light { background-color: #ffb8c9; color: #9d174d; }
         .flow-medium { background-color: #ff8ca6; color: #fff; }
         .flow-heavy { background-color: #ff5c7c; color: #fff; }
@@ -65,20 +57,19 @@
         .sunday-text { color: #ef4444; }
         .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 50; transition: opacity 0.2s ease-in-out; }
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .tab-btn.active { background-color: #ff5c7c; color: white; }
+        .tab-btn.active { background-color: transparent; color: white;}
         .hidden { display: none !important; }
         .month-picker-btn { width: 100%; padding: 0.75rem; border-radius: 0.5rem; font-weight: 500; transition: background-color 0.15s; }
         .month-picker-btn:hover { background-color: #f3f4f6; }
         .month-picker-btn.active { background-color: #ff5c7c; color: white; }
         .auth-form-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
-        
-        /* Buttery Smooth Transition classes */
-        .screen-transition {
-            transition: opacity 0.5s ease-in-out;
-        }
-        .is-transparent {
-            opacity: 0;
-        }
+        .screen-transition { transition: opacity 0.5s ease-in-out; }
+        .is-transparent { opacity: 0; }
+        #detailed-analysis { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out; }
+        #detailed-analysis.expanded { max-height: 1000px; opacity: 1;}
+        nav.flex { position: relative;}
+        nav.flex::before {content: '';position: absolute;z-index: 1;top: 4px;bottom: 4px;border-radius: 0.375rem; background-color: #ff5c7c; transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1);left: var(--indicator-left, 4px);width: var(--indicator-width, calc((100% - 8px) / 3));}
+        .tab-btn { position: relative; z-index: 2; transition: color 0.4s ease-in-out;}
     </style>
 </head>
 <body class="text-gray-800">
@@ -145,7 +136,7 @@
             <div class="text-center mt-8">
                 <a href="mailto:arunthomas04042001@gmail.com" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-pink-500 transition-colors">
                     <i class="fas fa-envelope"></i>
-                    Reach out to the developer
+                    Reach out to the dev
                 </a>
             </div>
         </div>
@@ -598,7 +589,7 @@
                 updateAllUI();
             }
 
-            // --- ALL OTHER APP FUNCTIONS (UNCHANGED) ---
+            // --- ALL OTHER APP FUNCTIONS ---
             function toISODateString(date) { var pad = function(num) { return (num < 10 ? '0' : '') + num; }; return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
             function fromISODateString(str) { return new Date(str + 'T00:00:00'); }
             function updateAllUI() { renderCalendar(); updateStats(); }
@@ -648,19 +639,6 @@
             initializeApp();
         });
     </script>
-    <script>
-        // Register the Service Worker for PWA offline functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('ServiceWorker registration failed: ', error);
-                    });
-            });
-        }
-    </script>
+    <script src="service-worker.js" defer></script>
 </body>
 </html>
