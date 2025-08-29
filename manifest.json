@@ -8,13 +8,13 @@
   "theme_color": "#ff5c7c",
   "icons": [
     {
-      "src": "pinkdays_logo.png",
+      "src": "assets/logo.png",
       "sizes": "192x192",
       "type": "image/png"
       "purpose": "any maskable"
     },
     {
-      "src": "pinkdays_logo.png",
+      "src": "assets/logo.png",
       "sizes": "512x512",
       "type": "image/png"
       "purpose": "any maskable"
