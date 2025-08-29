@@ -117,10 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function resetToDefaultState() {
-        switchTab('stats');
-    }
-
     // --- INITIAL APP LOAD ---
     function initializeApp() {
         if (localStorage.getItem('pinkDaysOfflineMode') === 'true') {
@@ -208,9 +204,10 @@ document.addEventListener('DOMContentLoaded', function () {
             showConfirm("Save Error", "Could not save your data. Please check your connection.", [{ text: "OK" }]);
         }
     }
+
     function initializeAppUI() {
         periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-        resetToDefaultState();
+        switchTab('stats'); // Directly set the starting tab to 'stats'
         updateAllUI();
         loadingOverlay.classList.add('hidden');
     }
@@ -262,16 +259,15 @@ document.addEventListener('DOMContentLoaded', function () {
     app.uploadInput.addEventListener('change', function (e) { var file = e.target.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function (event) { try { var uploadedData = JSON.parse(event.target.result); if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) { throw new Error("Invalid file format"); } var newPeriods = {}; periodData.periods.forEach(function (p) { newPeriods[p.date] = p; }); uploadedData.periods.forEach(function (p) { newPeriods[p.date] = p; }); periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function (key) { return newPeriods[key]; }); periodData.cycleLength = uploadedData.cycleLength; saveData(); showConfirm("Success", "Data has been merged.", [{ text: "OK" }]); } catch (err) { showConfirm("Upload Error", "The selected file is not a valid PinkDays backup.", [{ text: "OK" }]); } }; reader.readAsText(file); e.target.value = ''; });
     app.resetBtn.addEventListener('click', function () { showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [{ text: "Cancel", style: 'cancel' }, { text: "Yes, Reset", action: function () { if (isOfflineMode) localStorage.removeItem('pinkDaysData'); periodData = { periods: [], cycleLength: 28 }; saveData(); }, style: 'bg-red-600' }]); });
 
-    // Handles browser session restore (bfcache)
+    // MODIFIED EVENT LISTENER
     window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
-            // Page was restored from cache, which can cause an inconsistent UI state.
-            // Reset to the default state to ensure everything is correct.
-            console.log('Page restored from bfcache. Resetting to default state.');
-            resetToDefaultState();
+            // Page was restored from cache. Force the view back to the stats tab.
+            console.log('Page restored from bfcache. Forcing view to stats tab.');
+            switchTab('stats');
         }
     });
-    
+        
     // Initialize the app on load
     initializeApp();
 });
