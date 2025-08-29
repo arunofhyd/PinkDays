@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tabPanes: document.querySelectorAll('.tab-pane'),
         countdown: document.getElementById('next-period-countdown'), nextDate: document.getElementById('next-period-date'), nextFertileWindow: document.getElementById('next-fertile-window'), avgCycle: document.getElementById('avg-cycle-length'), avgPeriod: document.getElementById('avg-period-length'), flowAnalysis: document.getElementById('flow-analysis'), historyList: document.getElementById('period-history-list'), detailedAnalysis: document.getElementById('detailed-analysis'), showAnalysisBtn: document.getElementById('show-analysis-btn'), analysisArrow: document.getElementById('analysis-arrow'),
         calendarGrid: document.getElementById('calendar-grid'), monthYear: document.getElementById('month-year'), prevBtn: document.getElementById('prev-month-btn'), nextBtn: document.getElementById('next-month-btn'), logPeriodBtn: document.getElementById('log-period-btn'),
-        cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn: document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
+        cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn = document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
         welcomeModal: document.getElementById('welcome-modal'), closeWelcomeBtn: document.getElementById('close-welcome-btn'), logModal: document.getElementById('log-period-modal'), startDateInput: document.getElementById('start-date-input'), endDateInput: document.getElementById('end-date-input'), dailyFlowContainer: document.getElementById('daily-flow-container'), saveLogBtn: document.getElementById('save-log-btn'), cancelLogBtn: document.getElementById('cancel-log-btn'), monthPickerModal: document.getElementById('month-picker-modal'), prevYearBtn: document.getElementById('prev-year-btn'), nextYearBtn: document.getElementById('next-year-btn'), pickerYearDisplay: document.getElementById('picker-year-display'), monthGrid: document.getElementById('month-grid'), closeMonthPickerBtn: document.getElementById('close-month-picker-btn'), confirmModal: document.getElementById('confirm-modal'), confirmTitle: document.getElementById('confirm-title'), confirmMessage: document.getElementById('confirm-message'), confirmOptions: document.getElementById('confirm-options-container')
     };
 
@@ -92,37 +92,63 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- Core Functions ---
+    function initializeStatsTab() {
+        // Force clean slate
+        app.tabButtons.forEach(btn => btn.classList.remove('active'));
+        app.tabPanes.forEach(pane => pane.classList.add('hidden'));
+        
+        // Set stats as active
+        const statsButton = document.querySelector('.tab-btn[data-tab="stats"]');
+        const statsPane = document.getElementById('stats-tab');
+        
+        if (statsButton) {
+            statsButton.classList.add('active');
+        }
+        if (statsPane) {
+            statsPane.classList.remove('hidden');
+        }
+        
+        // Position indicator pill for stats tab
+        if (app.nav && statsButton) {
+            const clientWidth = statsButton.clientWidth;
+            const offsetLeft = statsButton.offsetLeft;
+            app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
+            app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
+        }
+    }
+
     function switchTab(tabName) {
         if (!app.nav) return;
     
-        // Use a 16ms timeout to ensure this code runs AFTER the browser has fully painted its cached state.
-        setTimeout(() => {
-            // --- STEP 1: Forcefully deactivate and hide EVERYTHING first ---
-            app.tabButtons.forEach(btn => btn.classList.remove('active'));
-            app.tabPanes.forEach(pane => pane.classList.add('hidden'));
-    
-            // --- STEP 2: Now, activate ONLY the correct tab and pane ---
-            const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-            const paneToShow = document.getElementById(tabName + '-tab');
-    
-            if (activeTabButton) {
-                activeTabButton.classList.add('active');
-            }
-            if (paneToShow) {
-                paneToShow.classList.remove('hidden');
-            }
-    
-            // --- STEP 3: Position the indicator pill ---
-            if (app.nav && activeTabButton) {
-                const clientWidth = activeTabButton.clientWidth;
-                const offsetLeft = activeTabButton.offsetLeft;
-                app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
-                app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
-            }
-        }, 16); // Using a 16ms delay is the critical change.
+        // Remove active state from all tabs and hide all panes
+        app.tabButtons.forEach(btn => btn.classList.remove('active'));
+        app.tabPanes.forEach(pane => pane.classList.add('hidden'));
+
+        // Activate the selected tab and show its pane
+        const activeTabButton = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+        const paneToShow = document.getElementById(tabName + '-tab');
+
+        if (activeTabButton) {
+            activeTabButton.classList.add('active');
+        }
+        if (paneToShow) {
+            paneToShow.classList.remove('hidden');
+        }
+
+        // Position the indicator pill
+        if (app.nav && activeTabButton) {
+            const clientWidth = activeTabButton.clientWidth;
+            const offsetLeft = activeTabButton.offsetLeft;
+            app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
+            app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
+        }
     }
+
     // --- INITIAL APP LOAD ---
     function initializeApp() {
+        // Always force stats tab to be active first
+        initializeStatsTab();
+        
         if (localStorage.getItem('pinkDaysOfflineMode') === 'true') {
             isOfflineMode = true;
             currentUser = null;
@@ -211,7 +237,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializeAppUI() {
         periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-        switchTab('stats'); // Directly set the starting tab to 'stats'
+        // Force stats tab initialization
+        initializeStatsTab();
         updateAllUI();
         loadingOverlay.classList.add('hidden');
     }
@@ -263,12 +290,20 @@ document.addEventListener('DOMContentLoaded', function () {
     app.uploadInput.addEventListener('change', function (e) { var file = e.target.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function (event) { try { var uploadedData = JSON.parse(event.target.result); if (!uploadedData.periods || !uploadedData.hasOwnProperty('cycleLength')) { throw new Error("Invalid file format"); } var newPeriods = {}; periodData.periods.forEach(function (p) { newPeriods[p.date] = p; }); uploadedData.periods.forEach(function (p) { newPeriods[p.date] = p; }); periodData.periods = Object.values ? Object.values(newPeriods) : Object.keys(newPeriods).map(function (key) { return newPeriods[key]; }); periodData.cycleLength = uploadedData.cycleLength; saveData(); showConfirm("Success", "Data has been merged.", [{ text: "OK" }]); } catch (err) { showConfirm("Upload Error", "The selected file is not a valid PinkDays backup.", [{ text: "OK" }]); } }; reader.readAsText(file); e.target.value = ''; });
     app.resetBtn.addEventListener('click', function () { showConfirm("Reset All Data?", "This action cannot be undone and will delete all your cycle history.", [{ text: "Cancel", style: 'cancel' }, { text: "Yes, Reset", action: function () { if (isOfflineMode) localStorage.removeItem('pinkDaysData'); periodData = { periods: [], cycleLength: 28 }; saveData(); }, style: 'bg-red-600' }]); });
 
-    // MODIFIED EVENT LISTENER
+    // Force stats tab on any page restoration
     window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
-            // Page was restored from cache. Force the view back to the stats tab.
             console.log('Page restored from bfcache. Forcing view to stats tab.');
-            switchTab('stats');
+            initializeStatsTab();
+        }
+    });
+
+    // Force stats tab on any visibility changes
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            setTimeout(() => {
+                initializeStatsTab();
+            }, 100);
         }
     });
         
