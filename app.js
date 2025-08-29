@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tabPanes: document.querySelectorAll('.tab-pane'),
         countdown: document.getElementById('next-period-countdown'), nextDate: document.getElementById('next-period-date'), nextFertileWindow: document.getElementById('next-fertile-window'), avgCycle: document.getElementById('avg-cycle-length'), avgPeriod: document.getElementById('avg-period-length'), flowAnalysis: document.getElementById('flow-analysis'), historyList: document.getElementById('period-history-list'), detailedAnalysis: document.getElementById('detailed-analysis'), showAnalysisBtn: document.getElementById('show-analysis-btn'), analysisArrow: document.getElementById('analysis-arrow'),
         calendarGrid: document.getElementById('calendar-grid'), monthYear: document.getElementById('month-year'), prevBtn: document.getElementById('prev-month-btn'), nextBtn: document.getElementById('next-month-btn'), logPeriodBtn: document.getElementById('log-period-btn'),
-        cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn = document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
+        cycleOverrideInput: document.getElementById('cycle-length-input-settings'), saveCycleOverrideBtn: document.getElementById('save-cycle-override-btn'), recalculateBtn: document.getElementById('recalculate-btn-settings'), exportBtn: document.getElementById('export-data-btn'), importBtn: document.getElementById('import-data-btn'), uploadInput: document.getElementById('upload-data-input'), resetBtn: document.getElementById('reset-data-btn'),
         welcomeModal: document.getElementById('welcome-modal'), closeWelcomeBtn: document.getElementById('close-welcome-btn'), logModal: document.getElementById('log-period-modal'), startDateInput: document.getElementById('start-date-input'), endDateInput: document.getElementById('end-date-input'), dailyFlowContainer: document.getElementById('daily-flow-container'), saveLogBtn: document.getElementById('save-log-btn'), cancelLogBtn: document.getElementById('cancel-log-btn'), monthPickerModal: document.getElementById('month-picker-modal'), prevYearBtn: document.getElementById('prev-year-btn'), nextYearBtn: document.getElementById('next-year-btn'), pickerYearDisplay: document.getElementById('picker-year-display'), monthGrid: document.getElementById('month-grid'), closeMonthPickerBtn: document.getElementById('close-month-picker-btn'), confirmModal: document.getElementById('confirm-modal'), confirmTitle: document.getElementById('confirm-title'), confirmMessage: document.getElementById('confirm-message'), confirmOptions: document.getElementById('confirm-options-container')
     };
 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Core Functions ---
     function initializeStatsTab() {
-        // Force clean slate
+        // Force clean slate - remove all active states and hide all panes
         app.tabButtons.forEach(btn => btn.classList.remove('active'));
         app.tabPanes.forEach(pane => pane.classList.add('hidden'));
         
