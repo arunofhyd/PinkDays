@@ -1,7 +1,7 @@
 {
   "name": "PinkDays - Period Tracker",
   "short_name": "PinkDays",
-  "description": "A simple, private, and offline-first period tracker.",
+  "description": "PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff0f3",
