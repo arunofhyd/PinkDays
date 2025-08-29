@@ -74,7 +74,7 @@ function showAppScreen() {
 document.addEventListener('DOMContentLoaded', function () {
     // --- DOM Elements ---
     var app = {
-        nav: document.querySelector('nav.flex'), // Explicitly add nav for the observer
+        nav: document.querySelector('nav.flex'),
         tabButtons: document.querySelectorAll('.tab-btn'), tabPanes: document.querySelectorAll('.tab-pane'),
         countdown: document.getElementById('next-period-countdown'), nextDate: document.getElementById('next-period-date'), nextFertileWindow: document.getElementById('next-fertile-window'), avgCycle: document.getElementById('avg-cycle-length'), avgPeriod: document.getElementById('avg-period-length'), flowAnalysis: document.getElementById('flow-analysis'), historyList: document.getElementById('period-history-list'), detailedAnalysis: document.getElementById('detailed-analysis'), showAnalysisBtn: document.getElementById('show-analysis-btn'), analysisArrow: document.getElementById('analysis-arrow'),
         calendarGrid: document.getElementById('calendar-grid'), monthYear: document.getElementById('month-year'), prevBtn: document.getElementById('prev-month-btn'), nextBtn: document.getElementById('next-month-btn'), logPeriodBtn: document.getElementById('log-period-btn'),
@@ -89,29 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
         periods: [],
         cycleLength: 28
     };
-
-    // =================================================================
-    //  THE NEW FIX: ResizeObserver to set initial tab state
-    // =================================================================
-    const initialTabObserver = new ResizeObserver((entries) => {
-        // We only care about the first time the element has a size
-        const navEntry = entries[0];
-        if (navEntry.contentRect.width > 0) {
-            const lastTab = localStorage.getItem('pinkDaysLastTab') || 'stats';
-            console.log(`ResizeObserver fired: Setting initial tab to '${lastTab}'`);
-            switchTab(lastTab);
-            
-            // Stop observing after we've set the initial tab
-            initialTabObserver.disconnect();
-        }
-    });
-
-    // Start observing the navigation bar
-    if (app.nav) {
-        initialTabObserver.observe(app.nav);
-    }
-    // =================================================================
-
 
     // --- INITIAL APP LOAD ---
     function initializeApp() {
@@ -208,7 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function initializeAppUI() {
         periodData.periods.sort((a, b) => a.date.localeCompare(b.date));
-        // **FIX**: The initial tab switching is now handled by the ResizeObserver
+        // **FIX**: Always set the pill to the default 'stats' tab position on load.
+        switchTab('stats');
         updateAllUI();
         loadingOverlay.classList.add('hidden');
     }
@@ -218,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fromISODateString(str) { return new Date(str + 'T00:00:00'); }
     function updateAllUI() { renderCalendar(); updateStats(); }
     function switchTab(tabName) {
-        if (!app.nav) return; // Guard clause
+        if (!app.nav) return;
         app.tabPanes.forEach(function (pane) { pane.classList.add('hidden'); });
         const paneToShow = document.getElementById(tabName + '-tab');
         if (paneToShow) paneToShow.classList.remove('hidden');
@@ -231,14 +209,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (app.nav && activeTab) {
             const clientWidth = activeTab.clientWidth;
             if (clientWidth === 0) {
-                console.warn(`switchTab called for '${tabName}' when tab width is 0.`);
+                // If width is 0, try again in a moment. This is a fallback for strange rendering issues.
+                setTimeout(() => switchTab(tabName), 50);
                 return;
             }
             const offsetLeft = activeTab.offsetLeft;
             app.nav.style.setProperty('--indicator-left', `${offsetLeft}px`);
             app.nav.style.setProperty('--indicator-width', `${clientWidth}px`);
         }
-        localStorage.setItem('pinkDaysLastTab', tabName);
+        // **FIX**: Do NOT save the last tab anymore.
+        // localStorage.setItem('pinkDaysLastTab', tabName);
     }
     function updateStats() { var startDates = getPeriodStartDates(); var calculatedAvgCycle = calculateAverageCycleLength(startDates); var effectiveCycleLength = periodData.cycleLength || calculatedAvgCycle; var avgPeriod = calculateAveragePeriodLength(); app.avgCycle.textContent = effectiveCycleLength + ' days'; app.avgPeriod.textContent = avgPeriod.toFixed(1) + ' days'; app.cycleOverrideInput.value = effectiveCycleLength; var nextDate = getNextPredictedStartDate(startDates, effectiveCycleLength); if (nextDate) { var today = new Date(); today.setHours(0, 0, 0, 0); var diffTime = nextDate - today; var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); if (diffDays === 0) app.countdown.textContent = "Today"; else if (diffDays < 0) app.countdown.textContent = "Overdue"; else app.countdown.textContent = diffDays + ' day' + (diffDays !== 1 ? 's' : ''); app.nextDate.textContent = '(' + nextDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) + ')'; } else { app.countdown.textContent = '--'; app.nextDate.textContent = 'Log a period to see predictions'; } renderHistory(startDates); renderFlowAnalysis(); renderNextFertileWindow(); }
     function renderHistory(startDates) { app.historyList.innerHTML = ''; if (startDates.length === 0) { app.historyList.innerHTML = '<li class="text-center text-gray-500">No periods logged yet.</li>'; return; } var periodBlocks = getPeriodBlocks(startDates); periodBlocks.reverse().slice(0, 5).forEach(function (block) { var startDate = fromISODateString(block.start); var endDate = fromISODateString(block.end); var li = document.createElement('li'); li.className = 'flex items-center space-x-2 bg-gray-50 p-3 rounded-lg'; li.innerHTML = '<div>' + '<p class="font-semibold">' + startDate.toLocaleDateString('default', { month: 'long', day: 'numeric' }) + ' - ' + endDate.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' }) + '</p>' + '<p class="text-sm text-gray-500">' + block.length + ' days' + (block.cycleLength ? ' (' + block.cycleLength + '-day cycle)' : '') + '</p>' + '</div>'; app.historyList.appendChild(li); }); }
