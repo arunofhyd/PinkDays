@@ -10,6 +10,23 @@
     <meta name="description" content="PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.">
     <meta name="keywords" content="period tracker, menstrual calendar, cycle tracker, fertile window calculator, ovulation predictor, period log, period app, free period tracker, period cycle history, menstrual health, pregnancy planning, pinkdays, simple period tracker">
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://pinkdays.vercel.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pinkdays.vercel.app/">
+    <meta property="og:title" content="PinkDays - Period Tracker">
+    <meta property="og:description" content="PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.">
+    <meta property="og:image" content="https://pinkdays.vercel.app/assets/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="https://pinkdays.vercel.app/">
+    <meta property="twitter:title" content="PinkDays - Period Tracker">
+    <meta property="twitter:description" content="PinkDays is a simple period tracker and menstrual calendar. Log your flow, view your cycle history, and predict your fertile days. Backup your data or use it completely offline.">
+    <meta property="twitter:image" content="https://pinkdays.vercel.app/assets/logo.png">
+
     <!-- PWA and Mobile App Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff5c7c">
@@ -320,6 +337,19 @@
     </div>
 
     <!-- Firebase SDKs -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -663,6 +693,5 @@
             initializeApp();
         });
     </script>
-    <script src="service-worker.js" defer></script>
 </body>
 </html>
