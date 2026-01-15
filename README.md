@@ -1,33 +1,36 @@
-<h2 align="center">PinkDays</h2>
-<p align="center">A beautiful, private, and lightweight period tracker that runs entirely on your device.</p>
+**PinkDays** is a beautiful, private, and lightweight period tracker that runs entirely on your device.
 
-<p align="center">
-  <img width="300" height="300" alt="PinkDays Logo" src="assets/logo_t.png"/>
-</p>
+We prioritize your privacy above all else. Unlike other apps, PinkDays keeps your sensitive health data stored securely in your browser, with no unauthorized cloud uploads.
 
-### ✨ Features
+## 🚀 Why PinkDays?
 
-- 📈 **Smart Predictions**  
-  Accurately forecasts your next period and fertile window using your cycle history.
+| Feature | PinkDays | Flo / Clue |
+| :--- | :--- | :--- |
+| **Privacy** | 🔒 **Maximum** (On-Device) | ☁️ **Low** (Cloud/Data Sales) |
+| **Cost** | 💸 **Free** (Forever) | 💳 **Subscription** (Premium) |
+| **Ads** | 🚫 **None** (Clean UI) | 📢 **Frequent** |
+| **Data Control** | 💾 **Full** (Export/Import) | 🔒 **Locked** (Hard to leave) |
 
-- 🗓️ **Interactive Calendar**  
-  Log your period, flow intensity, and view past and upcoming cycles in a clean visual layout.
+## ✨ Key Features
 
-- 📊 **Insightful Statistics**  
-  Track your average cycle length, period duration, and flow patterns with easy-to-understand data points.
+*   **Smart Predictions**: 📈 Accurately forecasts your next period and fertile window.
+*   **Interactive Calendar**: 🗓️ Log flow intensity and view cycle history in a clean layout.
+*   **Insightful Statistics**: 📊 Track average cycle length and duration patterns.
+*   **Privacy-First**: 🔒 Data stays 100% on your device by default.
+*   **Cloud Sync**: ☁️ Optional login to sync data across devices.
+*   **Data Control**: 📥 Backup and restore your data with one click.
 
-- 🔒 **Privacy-First Design**  
-  Your data stays 100% on your device, stored securely in your browser. Nothing is ever uploaded or shared.
+## 📦 Tech Stack
+*   **HTML5**
+*   **Tailwind CSS**
+*   **JavaScript**
+*   **Firebase** (Optional Sync)
 
-- ☁️ **Cloud Syncing**
-  You can also sync your data across devices through cloud services login.
-  
-- 📥 **Data Control**  
-  Backup and restore your data with one click—perfect for switching devices or peace of mind.
+## 📄 License
+MIT License. Free for personal use.
 
 ---
 
 <p align="center">
   Made with ❤️ by <a href="mailto:arunthomas04042001@gmail.com">Arun Thomas</a>
 </p>
-
