@@ -26,3 +26,8 @@
   Backup and restore your data with one click—perfect for switching devices or peace of mind.
 
 ---
+
+<p align="center">
+  Made with ❤️ by <a href="mailto:arunthomas04042001@gmail.com">Arun Thomas</a>
+</p>
+
