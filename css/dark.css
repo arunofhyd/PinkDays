@@ -1,0 +1,81 @@
+body.dark {
+    background-color: #111827;
+    color: #f3f4f6;
+}
+
+body.dark .bg-white {
+    background-color: #1f2937;
+    color: #f3f4f6;
+}
+
+body.dark .bg-gray-50 {
+    background-color: #374151;
+    color: #f3f4f6;
+}
+
+body.dark .bg-gray-100 {
+    background-color: #374151;
+    color: #f3f4f6;
+}
+
+body.dark .bg-gray-200 {
+    background-color: #4b5563;
+    color: #f3f4f6;
+}
+
+body.dark .text-gray-800,
+body.dark .text-gray-700 {
+    color: #f3f4f6;
+}
+
+body.dark .text-gray-600,
+body.dark .text-gray-500 {
+    color: #d1d5db;
+}
+
+body.dark input,
+body.dark select {
+    background-color: #374151;
+    color: #fff;
+    border-color: #4b5563;
+}
+
+/* Modal backdrop */
+body.dark .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Calendar */
+body.dark .day {
+    color: #f3f4f6;
+}
+
+body.dark .day.disabled {
+    color: #6b7280;
+}
+
+body.dark .day:not(.disabled):hover {
+    background-color: #4b5563;
+}
+
+body.dark .day.today {
+    color: #fff;
+    box-shadow: 0 0 0 2px #ff8ca6;
+}
+
+body.dark .sunday-text {
+    color: #f87171;
+}
+
+/* Ensure flow colors remain visible or adjust them */
+/* The existing flow colors are pastels, might look okay on dark background */
+
+body.dark .predicted-day {
+    background-color: #374151; /* Darker background */
+    border-color: #ffb8c9;
+}
+
+body.dark .fertile-day {
+    background-color: #155e75; /* Darker cyan */
+    color: #fff;
+}
