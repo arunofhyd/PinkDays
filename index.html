@@ -60,7 +60,7 @@
    <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
+
         }
         .main-gradient-text {
             background: -webkit-linear-gradient(45deg, #ff5c7c,#ff8ca6);
@@ -111,28 +111,68 @@
         .is-transparent {
             opacity: 0;
         }
+
+        .app-bg {
+            background-color: #faf5f6;
+            background-image: radial-gradient(at 0% 0%, #ffe4e6 0, transparent 50%), radial-gradient(at 100% 100%, #fce7f3 0, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 10px 20px -5px rgba(0, 0, 0, 0.02);
+        }
+        .soft-input {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: all 0.2s ease;
+        }
+        .soft-input:focus {
+            background: #ffffff;
+            border-color: #ff8ca6;
+            box-shadow: 0 0 0 4px rgba(255, 140, 166, 0.15);
+            outline: none;
+        }
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+        .btn-shadow:hover {
+            box-shadow: 0 10px 20px -5px rgba(255, 92, 124, 0.3);
+        }
+        .tab-btn {
+            background: transparent;
+        }
+        .tab-btn.active {
+            background: linear-gradient(to right, #ff8ca6, #ff5c7c);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 92, 124, 0.3);
+        }
+
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 app-bg min-h-screen">
 
     <!-- =========== AUTHENTICATION SCREEN =========== -->
 <div id="auth-container" class="auth-form-container screen-transition is-transparent hidden">
     <div class="w-full max-w-md">
-        <div class="bg-white p-8 rounded-2xl shadow-xl">
+        <div class="glass-card p-8 sm:p-10 rounded-3xl">
             <div class="text-center mb-8">
-                <div class="flex justify-center items-baseline gap-2">
-                    <img src="/assets/logo_t.png" alt="Logo" class="w-12 h-12 relative top-1" onerror="this.style.display='none'">
-                    <div class="pb-2">
-                        <h1 class="text-5xl font-bold main-gradient-text pb-2">PinkDays</h1>
-                    </div>
+                <div class="flex justify-center items-center gap-2 mb-4">
+                    <img src="/assets/logo_t.png" alt="Logo" class="w-12 h-12" onerror="this.style.display='none'">
+                    <h1 class="text-5xl font-bold main-gradient-text">PinkDays</h1>
                 </div>
                 <p class="text-gray-600">A simple period tracker and menstrual calendar.</p>
             </div>
             
             <div class="space-y-4">
-                <input id="email-input" type="email" placeholder="Email" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
+                <input id="email-input" type="email" placeholder="Email" class="w-full px-4 py-3 soft-input rounded-2xl px-5 py-4">
                 <div class="relative">
-                    <input id="password-input" type="password" placeholder="Password" class="w-full px-4 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
+                    <input id="password-input" type="password" placeholder="Password" class="w-full px-4 py-3 soft-input rounded-2xl px-5 py-4">
                     <button id="password-toggle" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600">
                         <i id="eye-open-icon" class="fas fa-eye"></i>
                         <i id="eye-closed-icon" class="fas fa-eye-slash hidden"></i>
@@ -146,11 +186,11 @@
             <div id="auth-error-message" class="text-red-600 text-sm mt-4 text-center h-4"></div>
 
             <div class="flex items-center gap-2 mt-4">
-                <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition main-gradient-box flex justify-center items-center h-12">
+                <button id="signin-btn" class="w-full py-3 text-white font-semibold rounded-2xl shadow-md hover-lift btn-shadow main-gradient-box text-white font-bold flex justify-center items-center h-12">
                     <span class="button-text">Sign In</span>
                     <i class="fas fa-spinner fa-spin hidden"></i>
                 </button>
-                <button id="signup-btn" class="w-full py-3 text-gray-700 bg-gray-200 font-semibold rounded-lg hover:bg-gray-300 transition flex justify-center items-center h-12">
+                <button id="signup-btn" class="w-full py-3 text-gray-700 bg-white/60 backdrop-blur-sm border border-gray-200 font-semibold rounded-2xl hover:bg-white/80 transition-colors hover-lift flex justify-center items-center h-12">
                     <span class="button-text">Sign Up</span>
                     <i class="fas fa-spinner fa-spin hidden"></i>
                 </button>
@@ -162,13 +202,13 @@
                 <hr class="flex-grow border-t border-gray-300">
             </div>
 
-            <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition h-12">
+            <button id="google-signin-btn" class="w-full flex items-center justify-center gap-3 py-3 soft-input rounded-xl p-3 hover:bg-gray-100 transition h-12">
                 <img src="/assets/google.webp" alt="Google Icon" class="w-5 h-5 button-icon">
                 <span class="button-text">Continue with Google</span>
                 <i class="fas fa-spinner fa-spin hidden"></i>
             </button>
 
-            <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-gray-100 font-semibold rounded-lg hover:bg-gray-200 transition">
+            <button id="offline-btn" class="w-full text-center mt-3 py-3 text-gray-700 bg-white/50 backdrop-blur-sm border border-gray-200 font-semibold rounded-2xl hover:bg-white/70 transition-colors hover-lift">
                 Continue as Guest
                 <span class="block text-xs font-normal text-gray-600">(Saves data only on this device)</span>
             </button>
@@ -187,17 +227,17 @@
     <div id="app-wrapper" class="hidden screen-transition">
         <div id="app-container" class="max-w-xl mx-auto p-4">
             <header class="relative text-center my-6 flex justify-center items-center">
-                <div class="flex items-baseline gap-2">
-                    <img src="/assets/logo_t.png" alt="PinkDays Logo" class="w-10 h-10 relative top-1" onerror="this.style.display='none'">
+                <div class="flex items-center gap-2">
+                    <img src="/assets/logo_t.png" alt="PinkDays Logo" class="w-10 h-10" onerror="this.style.display='none'">
                     <h1 class="text-4xl font-bold main-gradient-text">PinkDays</h1>
                 </div>
                 <div id="user-controls" class="absolute right-0"></div>
             </header>
 
-            <nav class="flex justify-center bg-gray-200 rounded-lg p-1 mb-6">
-                <button data-tab="stats" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors active">Stats</button>
-                <button data-tab="calendar" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Calendar</button>
-                <button data-tab="settings" class="tab-btn flex-1 py-2 px-4 rounded-lg font-semibold transition-colors">Settings</button>
+            <nav class="flex justify-center glass-card rounded-2xl p-1.5 flex gap-1 mb-6">
+                <button data-tab="stats" class="tab-btn flex-1 py-2 px-4 rounded-xl font-semibold transition-all duration-200 active">Stats</button>
+                <button data-tab="calendar" class="tab-btn flex-1 py-2 px-4 rounded-xl font-semibold transition-all duration-200">Calendar</button>
+                <button data-tab="settings" class="tab-btn flex-1 py-2 px-4 rounded-xl font-semibold transition-all duration-200">Settings</button>
             </nav>
 
             <div id="tab-content">
@@ -208,11 +248,11 @@
                         <p id="next-period-countdown" class="text-5xl font-bold">--</p>
                         <p id="next-period-date" class="text-lg opacity-80 h-5 mt-2"></p>
                     </section>
-                    <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                    <section class="glass-card p-6 rounded-3xl text-center">
                         <h3 class="text-lg font-semibold mb-2 text-gray-700">Fertile During</h3>
                         <p id="next-fertile-window" class="text-3xl font-bold main-gradient-text">--</p>
                     </section>
-                    <section class="bg-white p-6 rounded-2xl shadow-lg">
+                    <section class="glass-card p-6 rounded-3xl">
                         <div class="grid grid-cols-2 gap-4 text-center">
                             <div>
                                 <p class="text-gray-600">Avg. Cycle Length</p>
@@ -226,19 +266,19 @@
                     </section>
                     
                     <div id="detailed-analysis" class="hidden space-y-6">
-                        <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <section class="glass-card p-6 rounded-3xl">
                             <h3 class="text-lg font-semibold mb-4 text-center">Average Flow Analysis</h3>
                             <div id="flow-analysis" class="text-center text-gray-600">
                             </div>
                         </section>
-                        <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <section class="glass-card p-6 rounded-3xl">
                             <h3 class="text-lg font-semibold mb-4 text-center">Period History</h3>
                             <ul id="period-history-list" class="space-y-3">
                             </ul>
                         </section>
                     </div>
                     <div class="text-center mt-6">
-                        <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full shadow-sm hover:opacity-90 transition-opacity">
+                        <button id="show-analysis-btn" class="inline-flex items-center gap-2 px-6 py-3 main-gradient-box text-white font-semibold rounded-full hover-lift btn-shadow text-white font-bold transition-all">
                             Detailed analysis <span id="analysis-arrow" class="text-2xl leading-none font-light">+</span>
                         </button>
                     </div>
@@ -246,7 +286,7 @@
 
                 <!-- Calendar Tab -->
                 <div id="calendar-tab" class="tab-pane hidden">
-                    <main class="bg-white p-6 rounded-2xl shadow-lg">
+                    <main class="glass-card p-6 rounded-3xl">
                         <div class="flex items-center justify-between mb-4">
                             <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-100">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -278,30 +318,30 @@
                 <!-- Settings Tab -->
                 <div id="settings-tab" class="tab-pane hidden">
                     <div class="space-y-6">
-                        <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <section class="glass-card p-6 rounded-3xl">
                             <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Backup & Restore</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="text-center">
-                                    <button id="import-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-xl shadow-md border-2 border-pink-500 hover:bg-pink-50 transition-colors">
+                                    <button id="import-data-btn" class="w-full flex items-center justify-center gap-2 bg-white text-pink-500 font-bold py-3 px-6 rounded-2xl shadow-md border-2 border-pink-400 text-pink-500 bg-white/50 backdrop-blur-sm hover:bg-pink-50 hover-lift transition-all">
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg> Import
                                     </button>
                                     <input type="file" id="upload-data-input" class="hidden" accept=".json">
                                 </div>
                                 <div class="text-center">
-                                    <button id="export-data-btn" class="w-full flex items-center justify-center gap-2 main-gradient-box text-white font-bold py-3 px-6 rounded-xl shadow-md hover:opacity-90 transition-opacity">
+                                    <button id="export-data-btn" class="w-full flex items-center justify-center gap-2 main-gradient-box text-white font-bold py-3 px-6 rounded-2xl shadow-md hover-lift btn-shadow text-white font-bold transition-all">
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg> Export
                                     </button>
                                 </div>
                             </div>
                         </section>
                         
-                        <section class="bg-white p-6 rounded-2xl shadow-lg">
+                        <section class="glass-card p-6 rounded-3xl">
                             <h3 class="text-xl font-semibold text-center mb-6 main-gradient-text">Override Average Cycle Length (days)</h3>
                             <div class="space-y-4">
                                 <div class="mb-4">
                                     <div class="flex items-center space-x-2">
-                                        <input type="number" id="cycle-length-input-settings" class="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-200 focus:border-pink-300 transition-colors" placeholder="e.g. 28">
-                                        <button id="save-cycle-override-btn" class="px-6 py-3 main-gradient-box text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-opacity" aria-label="Save">
+                                        <input type="number" id="cycle-length-input-settings" class="flex-1 p-3 soft-input rounded-2xl p-4 transition-colors" placeholder="e.g. 28">
+                                        <button id="save-cycle-override-btn" class="px-6 py-3 main-gradient-box text-white font-semibold rounded-2xl shadow-md hover-lift btn-shadow text-white font-bold transition-all" aria-label="Save">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></svg>
                                         </button>
                                     </div>
@@ -312,7 +352,7 @@
                             </div>
                         </section>
 
-                        <section class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                        <section class="glass-card p-6 rounded-3xl text-center">
                             <div>
                                 <button id="reset-data-btn" class="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-red-700 transition-colors">Reset All Data</button>
                             </div>
@@ -330,10 +370,10 @@
         </div>
         
         <!-- MODALS -->
-        <div id="welcome-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><img src="assets/logo_t.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'"><h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2><p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p><ul class="text-left space-y-3 mb-8"><li class="flex items-center"><span class="text-2xl mr-4">🗓️</span><span>Track your period & flow on the <b>Calendar</b>.</span></li><li class="flex items-center"><span class="text-2xl mr-4">📈</span><span>View predictions & history in the <b>Stats</b> tab.</span></li><li class="flex items-center"><span class="text-2xl mr-4">🔮</span><span>See your estimated <b>fertile window</b> automatically.</span></li><li class="flex items-center"><span class="text-2xl mr-4">⚙️</span><span><b>Export</b> or <b>Import</b> your data in Settings.</span></li></ul><button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Let's Get Started!</button></div></div>
-        <div id="log-period-modal" class="modal-backdrop hidden"><div class="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md"><h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2><div class="grid grid-cols-2 gap-4 mb-4"><div><label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label><input type="date" id="start-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div><div><label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label><input type="date" id="end-date-input" class="mt-1 w-full p-2 border border-gray-300 rounded-lg"></div></div><h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3><div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div><div class="flex flex-col gap-2"><button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button><button id="cancel-log-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Cancel</button></div></div></div>
-        <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop"><div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs"><div class="flex justify-between items-center mb-4"><button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3><button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div id="month-grid" class="grid grid-cols-4 gap-2"></div><div class="flex justify-end mt-4"><button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button></div></div></div>
-        <div id="confirm-modal" class="modal-backdrop hidden"><div class="bg-white p-8 rounded-2xl shadow-2xl w-11/12 max-w-md text-center"><h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2><p id="confirm-message" class="text-gray-600 mb-6"></p><div id="confirm-options-container" class="flex gap-4"></div></div></div>
+        <div id="welcome-modal" class="modal-backdrop hidden"><div class="glass-card p-8 rounded-xl w-11/12 max-w-md text-center"><img src="assets/logo_t.png" alt="PinkDays Logo" class="w-16 h-16 mx-auto mb-4" onerror="this.style.display='none'"><h2 class="text-2xl font-bold mb-4 main-gradient-text">Welcome to PinkDays!</h2><p class="text-gray-600 mb-6">Here's a quick look at what you can do:</p><ul class="text-left space-y-3 mb-8"><li class="flex items-center"><span class="text-2xl mr-4">🗓️</span><span>Track your period & flow on the <b>Calendar</b>.</span></li><li class="flex items-center"><span class="text-2xl mr-4">📈</span><span>View predictions & history in the <b>Stats</b> tab.</span></li><li class="flex items-center"><span class="text-2xl mr-4">🔮</span><span>See your estimated <b>fertile window</b> automatically.</span></li><li class="flex items-center"><span class="text-2xl mr-4">⚙️</span><span><b>Export</b> or <b>Import</b> your data in Settings.</span></li></ul><button id="close-welcome-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Let's Get Started!</button></div></div>
+        <div id="log-period-modal" class="modal-backdrop hidden"><div class="glass-card p-6 rounded-2xl w-11/12 max-w-md"><h2 class="text-2xl font-bold mb-4 text-center main-gradient-text">Log Period</h2><div class="grid grid-cols-2 gap-4 mb-4"><div><label for="start-date-input" class="block text-sm font-medium text-gray-700">Start Date</label><input type="date" id="start-date-input" class="mt-1 w-full soft-input rounded-xl p-3"></div><div><label for="end-date-input" class="block text-sm font-medium text-gray-700">End Date</label><input type="date" id="end-date-input" class="mt-1 w-full soft-input rounded-xl p-3"></div></div><h3 class="text-md font-semibold text-center mb-2">Daily Flow</h3><div id="daily-flow-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 app-bg rounded-lg border border-pink-100"></div><div class="flex flex-col gap-2"><button id="save-log-btn" class="w-full main-gradient-box text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition-opacity">Save</button><button id="cancel-log-btn" class="w-full bg-white text-gray-800 font-bold py-3 px-6 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">Cancel</button></div></div></div>
+        <div id="month-picker-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 modal-backdrop"><div class="glass-card rounded-3xl shadow-2xl p-6 w-full max-w-xs"><div class="flex justify-between items-center mb-4"><button id="prev-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Previous Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><h3 id="picker-year-display" class="text-lg font-semibold text-gray-800">2025</h3><button id="next-year-btn" class="p-2 rounded-full hover:bg-gray-200" aria-label="Next Year"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div id="month-grid" class="grid grid-cols-4 gap-2"></div><div class="flex justify-end mt-4"><button id="close-month-picker-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Close</button></div></div></div>
+        <div id="confirm-modal" class="modal-backdrop hidden"><div class="glass-card p-8 rounded-3xl w-11/12 max-w-md text-center"><h2 id="confirm-title" class="text-2xl font-bold mb-2"></h2><p id="confirm-message" class="text-gray-600 mb-6"></p><div id="confirm-options-container" class="flex gap-4"></div></div></div>
     </div>
 
     <!-- Firebase SDKs -->
