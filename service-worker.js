@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pinkdays-cache-v1';
+const CACHE_NAME = 'pinkdays-cache-v2';
 
 // List of files to cache on install.
 const urlsToCache = [
@@ -7,7 +7,8 @@ const urlsToCache = [
   'manifest.json',
   'assets/logo.png', // This logo is no longer in the HTML, but including it just in case.
   'assets/logo_t.png',
-  'assets/output.css',
+  'assets/styles.css',
+  'assets/app.js',
   'assets/google.webp',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
 ];
